@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>КОМПЛЕКТ — цены на материалы</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  :root{
+    --ink:#1b1d1c; --paper:#f7f6f4; --card:#ffffff; --line:#e6e4e1;
+    --gray:#6b6f6d; --orange:#e84e0f; --orange-soft:#fdede4;
+    --green:#1f7a4d; --green-soft:#e8f5ee; --red:#b3433b; --red-soft:#fbeceb;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  body{margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    background:var(--paper); color:var(--ink); padding-bottom:76px;}
+  .tape{height:4px; background:repeating-linear-gradient(135deg,var(--orange) 0 14px,var(--ink) 14px 28px);}
+  .wrap{max-width:520px; margin:0 auto; padding:16px;}
+  h1{font-size:22px; font-weight:800; letter-spacing:-0.3px; margin:0;}
+  .sub{font-size:12px; color:var(--gray); margin-top:2px;}
+  .searchbar{display:flex; gap:8px; background:var(--card); border:1px solid var(--line);
+    border-radius:16px; padding:10px 12px; margin-top:14px; align-items:center;}
+  .searchbar input{flex:1; border:none; outline:none; font-size:15px; background:transparent; min-width:0;}
+  .btn{background:var(--ink); color:#fff; border:none; border-radius:12px; padding:8px 14px;
+    font-size:13px; font-weight:700; cursor:pointer;}
+  .btn-orange{background:var(--orange);}
+  .section-label{font-size:11px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase;
+    color:#a8a6a2; margin:18px 0 8px;}
+  .grid4{display:grid; grid-template-columns:repeat(4,1fr); gap:8px;}
+  .cat{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:12px 4px;
+    text-align:center; cursor:pointer; transition:transform .1s;}
+  .cat:active{transform:scale(.95);}
+  .cat .em{font-size:18px; color:var(--orange);}
+  .cat .nm{font-size:11px; margin-top:4px; line-height:1.2;}
+  .chip{display:inline-flex; align-items:center; gap:4px; font-size:12px; background:#eceae7;
+    border:none; border-radius:999px; padding:7px 12px; margin:0 6px 6px 0; cursor:pointer; color:var(--ink);}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px;
+    margin-bottom:10px; cursor:pointer;}
+  .card:active{transform:scale(.99);}
+  .row{display:flex; justify-content:space-between; align-items:flex-start; gap:10px;}
+  .pname{font-size:14px; font-weight:600; line-height:1.35;}
+  .psku{font-size:11px; color:#a8a6a2; margin-top:4px;}
+  .pprice{font-size:15px; font-weight:800; white-space:nowrap;}
+  .punit{font-size:10px; color:#a8a6a2; text-align:right;}
+  .meta{display:flex; justify-content:space-between; align-items:center; margin-top:10px;}
+  .meta .n{font-size:12px; color:var(--gray);}
+  .badge{font-size:11px; font-weight:600; border-radius:999px; padding:3px 8px;}
+  .b-green{background:var(--green-soft); color:var(--green);}
+  .b-red{background:var(--red-soft); color:var(--red);}
+  .b-orange{background:var(--orange-soft); color:#9a3a0e;}
+  .topbar{position:sticky; top:0; background:rgba(247,246,244,.96); backdrop-filter:blur(6px);
+    padding:10px 16px; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:8px; z-index:10;}
+  .back{border:none; background:transparent; font-size:20px; cursor:pointer; padding:4px 8px; color:var(--ink);}
+  .topbar .t{font-size:14px; font-weight:700;}
+  .topbar .s{font-size:11px; color:var(--gray);}
+  .offer{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px; margin-bottom:8px;}
+  .offer.best{border:1.5px solid var(--orange); box-shadow:0 2px 8px rgba(232,78,15,.08);}
+  .tagbest{font-size:9px; font-weight:800; letter-spacing:.5px; text-transform:uppercase;
+    background:var(--orange); color:#fff; border-radius:6px; padding:2px 6px; margin-left:6px; vertical-align:middle;}
+  .bar{height:4px; border-radius:99px; background:#efedea; margin-top:10px; overflow:hidden;}
+  .bar > div{height:100%; background:#cfccc7;}
+  .offer.best .bar > div{background:var(--orange);}
+  .offer .acts{display:flex; gap:8px; margin-top:10px; justify-content:flex-end;}
+  .mini{font-size:12px; font-weight:600; background:#f1efec; border:none; border-radius:10px;
+    padding:7px 11px; cursor:pointer; color:var(--ink);}
+  .fab{position:fixed; left:0; right:0; bottom:72px; display:flex; justify-content:center; z-index:20;
+    pointer-events:none;}
+  .fab button{pointer-events:auto; width:calc(100% - 32px); max-width:488px; border:none;
+    background:var(--ink); color:#fff; font-size:14px; font-weight:800; border-radius:16px;
+    padding:14px; cursor:pointer; box-shadow:0 8px 24px rgba(0,0,0,.18);}
+  .fab button.done{background:var(--green);}
+  .nav{position:fixed; bottom:0; left:0; right:0; background:#fff; border-top:1px solid var(--line);
+    display:flex; z-index:30; padding-bottom:env(safe-area-inset-bottom);}
+  .nav button{flex:1; border:none; background:transparent; padding:9px 0 7px; cursor:pointer;
+    font-size:10px; color:#a8a6a2; font-weight:600; position:relative;}
+  .nav button .i{display:block; font-size:19px; margin-bottom:2px;}
+  .nav button.on{color:var(--orange);}
+  .nav .dot{position:absolute; top:4px; right:26%; background:var(--orange); color:#fff;
+    font-size:9px; font-weight:800; min-width:16px; height:16px; border-radius:99px;
+    display:flex; align-items:center; justify-content:center; padding:0 4px;}
+  .sheet-bg{position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:40;}
+  .sheet{position:fixed; left:0; right:0; bottom:0; background:#fff; border-radius:20px 20px 0 0;
+    padding:20px 16px 28px; z-index:41; max-width:520px; margin:0 auto;}
+  .sheet h3{margin:0 0 14px; font-size:16px;}
+  .pillrow{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;}
+  .pill{font-size:12px; font-weight:700; border-radius:999px; padding:9px 14px; cursor:pointer;
+    border:1px solid var(--line); background:#fff; color:var(--ink);}
+  .pill.on{background:var(--ink); color:#fff; border-color:var(--ink);}
+  .switchrow{display:flex; justify-content:space-between; align-items:center; background:var(--paper);
+    border:1px solid var(--line); border-radius:14px; padding:12px 14px; margin-bottom:18px; cursor:pointer;}
+  .sw{width:40px; height:24px; border-radius:99px; background:#d6d3cf; padding:2px; transition:.15s;}
+  .sw.on{background:var(--orange);}
+  .sw i{display:block; width:20px; height:20px; background:#fff; border-radius:99px; transition:.15s;}
+  .sw.on i{transform:translateX(16px);}
+  .qty{display:flex; align-items:center; gap:4px; background:#f1efec; border-radius:12px; padding:4px;}
+  .qty button{width:28px; height:28px; border:none; background:#fff; border-radius:9px; cursor:pointer; font-weight:700;}
+  .qty span{min-width:62px; text-align:center; font-size:13px; font-weight:700;}
+  .total{background:var(--ink); color:#fff; border-radius:16px; padding:16px; display:flex;
+    justify-content:space-between; align-items:center; margin-top:14px;}
+  .total .l{font-size:13px; color:#c9cbc9;}
+  .total .v{font-size:18px; font-weight:800;}
+  .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:10px;}
+  .exp{background:#fff; border:1px solid var(--line); border-radius:16px; padding:12px 4px;
+    text-align:center; cursor:pointer; font-size:11px; font-weight:700; color:var(--ink);}
+  .exp .i{display:block; font-size:18px; margin-bottom:3px;}
+  .empty{text-align:center; padding:56px 24px; color:var(--gray);}
+  .empty .big{font-size:28px; margin-bottom:8px;}
+  .empty .t{font-weight:700; color:var(--ink); font-size:14px;}
+  .empty .s{font-size:12px; margin-top:4px;}
+  .toast{position:fixed; bottom:128px; left:0; right:0; display:flex; justify-content:center; z-index:50;}
+  .toast div{background:var(--ink); color:#fff; font-size:12px; font-weight:600; border-radius:12px;
+    padding:10px 16px; box-shadow:0 8px 24px rgba(0,0,0,.25);}
+  .fav{border:none; background:transparent; font-size:20px; cursor:pointer; margin-left:auto;}
+  .hidden{display:none;}
+</style>
+</head>
+<body>
+<div class="tape"></div>
+<div id="app"></div>
+<div class="nav" id="nav"></div>
+<div id="overlay"></div>
+
+<script>
+/* ───────── Telegram SDK ───────── */
+const tg = window.Telegram?.WebApp;
+if (tg) { tg.ready(); tg.expand(); tg.setHeaderColor('#1b1d1c'); }
+const haptic = (t='light') => tg?.HapticFeedback?.impactOccurred(t);
+
+/* ───────── Данные (демо; в продакшене — запросы к backend API) ───────── */
+const CATS = [
+  {id:'tile', nm:'Керамогранит', em:'▦'}, {id:'laminate', nm:'Ламинат', em:'▤'},
+  {id:'paint', nm:'Краска', em:'◐'}, {id:'wallpaper', nm:'Обои', em:'▥'},
+  {id:'light', nm:'Освещение', em:'✦'}, {id:'electric', nm:'Электрика', em:'⚡'},
+  {id:'plumbing', nm:'Сантехника', em:'◉'}, {id:'doors', nm:'Двери', em:'▯'},
+];
+const PRODUCTS = [
+  {id:1, cat:'tile', brand:'Cersanit', name:'Керамогранит Cersanit Concretehouse серый 29,7×59,8', sku:'C-CH4L092D', unit:'м²',
+   offers:[
+     {s:'Keramo City', c:'Астана', p:4290, st:true, u:'сегодня'},
+     {s:'СтройДом KZ', c:'Астана', p:4450, st:true, u:'вчера'},
+     {s:'Время Ремонта', c:'Алматы', p:4690, st:true, u:'2 дня назад'},
+     {s:'ЕвроКерамика', c:'Астана', p:5100, st:false, u:'5 дней назад'},
+   ]},
+  {id:2, cat:'tile', brand:'Kerama Marazzi', name:'Керамогранит Kerama Marazzi Про Фьюче беж 60×60', sku:'DD640200R', unit:'м²',
+   offers:[
+     {s:'ЕвроКерамика', c:'Астана', p:7850, st:true, u:'сегодня'},
+     {s:'Keramo City', c:'Астана', p:8200, st:true, u:'сегодня'},
+     {s:'Plitka Center', c:'Алматы', p:8490, st:true, u:'вчера'},
+   ]},
+  {id:3, cat:'tile', brand:'Estima', name:'Керамогранит Estima Cement CM01 неполир. 60×60', sku:'CM01/NS_R9', unit:'м²',
+   offers:[
+     {s:'СтройДом KZ', c:'Астана', p:6320, st:true, u:'сегодня'},
+     {s:'Plitka Center', c:'Алматы', p:6590, st:true, u:'3 дня назад'},
+   ]},
+  {id:4, cat:'laminate', brand:'Kronospan', name:'Ламинат Kronospan Castello Дуб горный 8 мм / 32 кл.', sku:'K063 SU', unit:'м²',
+   offers:[
+     {s:'Пол и Точка', c:'Астана', p:3150, st:true, u:'сегодня'},
+     {s:'СтройДом KZ', c:'Астана', p:3290, st:true, u:'вчера'},
+     {s:'Laminat Almaty', c:'Алматы', p:3480, st:true, u:'сегодня'},
+   ]},
+  {id:5, cat:'paint', brand:'Tikkurila', name:'Краска Tikkurila Euro Power 7 база A, 9 л', sku:'700001122', unit:'шт',
+   offers:[
+     {s:'ColorMix', c:'Астана', p:28900, st:true, u:'сегодня'},
+     {s:'СтройДом KZ', c:'Астана', p:30400, st:false, u:'4 дня назад'},
+   ]},
+  {id:6, cat:'light', brand:'Maytoni', name:'Трековый светильник Maytoni Focus LED 12W 4000K чёрный', sku:'TR032-2-12W4K-B', unit:'шт',
+   offers:[
+     {s:'Svet Pro', c:'Астана', p:14200, st:true, u:'сегодня'},
+     {s:'LightHouse KZ', c:'Алматы', p:14900, st:true, u:'вчера'},
+     {s:'Электро Мир', c:'Астана', p:16300, st:true, u:'сегодня'},
+   ]},
+];
+const fmt = n => n.toLocaleString('ru-RU');
+
+/* ───────── Состояние ───────── */
+const S = {
+  tab:'search', view:{name:'home'},
+  filters:{city:'Все города', inStock:false},
+  recent:['керамогранит 60х60','tikkurila'],
+  favorites:[2],
+  project:{name:'Кафе · Атырау', items:[{pid:1, qty:86},{pid:6, qty:14}]},
+};
+const user = tg?.initDataUnsafe?.user;
+const userName = user ? [user.first_name, user.last_name].filter(Boolean).join(' ') : 'Гость';
+
+/* ───────── Рендер ───────── */
+const app = document.getElementById('app');
+const nav = document.getElementById('nav');
+const overlay = document.getElementById('overlay');
+const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+
+function render(){ renderScreen(); renderNav(); }
+
+function renderNav(){
+  const items = [
+    ['search','⌕','Поиск',0],
+    ['favs','♡','Избранное',S.favorites.length],
+    ['project','▣','Подборки',S.project.items.length],
+    ['profile','◉','Профиль',0],
+  ];
+  nav.innerHTML = items.map(([id,i,l,b]) =>
+    `<button class="${S.tab===id?'on':''}" onclick="goTab('${id}')">
+       ${b?`<span class="dot">${b}</span>`:''}<span class="i">${i}</span>${l}</button>`).join('');
+}
+function goTab(id){ haptic(); S.tab=id; if(id==='search') S.view={name:'home'}; render(); }
+
+function renderScreen(){
+  if (S.tab==='search'){
+    if (S.view.name==='home') return renderHome();
+    if (S.view.name==='results') return renderResults();
+    if (S.view.name==='product') return renderProduct();
+  }
+  if (S.tab==='favs') return renderFavs();
+  if (S.tab==='project') return renderProject();
+  if (S.tab==='profile') return renderProfile();
+}
+
+function renderHome(){
+  app.innerHTML = `<div class="wrap">
+    <div class="row" style="align-items:baseline">
+      <div><h1>КОМПЛЕКТ</h1><div class="sub">цены поставщиков · Казахстан</div></div>
+      <span class="badge b-orange">β Астана</span>
+    </div>
+    <div class="searchbar">
+      <span style="color:#a8a6a2">⌕</span>
+      <input id="q" placeholder="Название или артикул…" onkeydown="if(event.key==='Enter')doSearch()">
+      <button class="btn" onclick="doSearch()">Найти</button>
+    </div>
+    <div class="section-label">Категории</div>
+    <div class="grid4">${CATS.map(c=>
+      `<div class="cat" onclick="openCat('${c.id}')"><div class="em">${c.em}</div><div class="nm">${c.nm}</div></div>`).join('')}
+    </div>
+    ${S.recent.length?`<div class="section-label">Недавно искали</div>
+      <div>${S.recent.map(r=>`<button class="chip" onclick="searchFor('${esc(r)}')">⟲ ${esc(r)}</button>`).join('')}</div>`:''}
+    <div class="section-label">Цена снизилась</div>
+    <div class="card" onclick="openProduct(4)">
+      <div class="row"><div>
+        <div class="pname">Ламинат Kronospan Castello 8 мм</div>
+        <div class="psku">от 3 150 ₸/м² · −6% за неделю</div>
+      </div><span class="badge b-green">↓</span></div>
+    </div>
+  </div>`;
+}
+
+function doSearch(){
+  const q = document.getElementById('q').value.trim();
+  if(!q) return;
+  searchFor(q);
+}
+function searchFor(q){
+  haptic();
+  S.recent = [q, ...S.recent.filter(x=>x!==q)].slice(0,5);
+  S.view = {name:'results', query:q, cat:null}; render();
+}
+function openCat(id){ haptic(); S.view={name:'results', query:'', cat:CATS.find(c=>c.id===id)}; render(); }
+
+function getResults(){
+  let list = PRODUCTS;
+  const v = S.view;
+  if (v.cat) list = list.filter(p=>p.cat===v.cat.id);
+  if (v.query){
+    const q = v.query.toLowerCase();
+    list = list.filter(p => p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q));
+  }
+  return list.map(p => {
+    let offers = p.offers;
+    if (S.filters.city!=='Все города') offers = offers.filter(o=>o.c===S.filters.city);
+    if (S.filters.inStock) offers = offers.filter(o=>o.st);
+    return {...p, offers};
+  }).filter(p=>p.offers.length);
+}
+
+function renderResults(){
+  const res = getResults();
+  const v = S.view;
+  const nf = (S.filters.city!=='Все города'?1:0)+(S.filters.inStock?1:0);
+  app.innerHTML = `
+    <div class="topbar">
+      <button class="back" onclick="goHome()">‹</button>
+      <div style="flex:1;min-width:0">
+        <div class="t">${v.cat?esc(v.cat.nm):'«'+esc(v.query)+'»'}</div>
+        <div class="s">${res.length} товаров · по цене</div>
+      </div>
+      <button class="mini" onclick="openFilters()">⚙ Фильтры${nf?` · ${nf}`:''}</button>
+    </div>
+    <div class="wrap" style="padding-top:12px">
+      ${res.length?'':'<div class="empty"><div class="big">∅</div><div class="t">Ничего не нашлось</div><div class="s">Попробуйте артикул производителя или уберите фильтры.</div></div>'}
+      ${res.map(p=>{
+        const ps = p.offers.map(o=>o.p), mn=Math.min(...ps), mx=Math.max(...ps);
+        return `<div class="card" onclick="openProduct(${p.id})">
+          <div class="row">
+            <div><div class="pname">${esc(p.name)}</div><div class="psku">арт. ${esc(p.sku)} · ${esc(p.brand)}</div></div>
+            <div><div class="pprice">от ${fmt(mn)} ₸</div><div class="punit">за ${p.unit}</div></div>
+          </div>
+          <div class="meta"><span class="n">▣ ${p.offers.length} поставщ.</span>
+            ${mx>mn?`<span class="badge b-green">экономия до ${Math.round((1-mn/mx)*100)}%</span>`:''}</div>
+        </div>`;}).join('')}
+    </div>`;
+}
+function goHome(){ S.view={name:'home'}; render(); }
+
+function openProduct(id){
+  haptic();
+  S.tab='search';
+  S.view={name:'product', pid:id, back:S.view.name==='results'?{...S.view}:null};
+  render();
+}
+
+function renderProduct(){
+  const p = PRODUCTS.find(x=>x.id===S.view.pid);
+  const offers = [...p.offers].sort((a,b)=>a.p-b.p);
+  const mn = offers[0].p;
+  const fav = S.favorites.includes(p.id);
+  const inPr = S.project.items.some(i=>i.pid===p.id);
+  app.innerHTML = `
+    <div class="topbar">
+      <button class="back" onclick="backFromProduct()">‹</button>
+      <div class="t">Сравнение цен</div>
+      <button class="fav" onclick="toggleFav(${p.id})">${fav?'♥':'♡'}</button>
+    </div>
+    <div class="wrap" style="padding-bottom:140px">
+      <div class="pname" style="font-size:16px">${esc(p.name)}</div>
+      <div style="margin:8px 0 14px">
+        <span class="badge" style="background:#eceae7;color:var(--gray)">арт. ${esc(p.sku)}</span>
+        <span class="badge" style="background:#eceae7;color:var(--gray)">${esc(p.brand)}</span>
+        <span class="badge" style="background:#eceae7;color:var(--gray)">цена за ${p.unit}</span>
+      </div>
+      ${offers.map((o,i)=>{
+        const d = Math.round((o.p-mn)/mn*100), best=i===0;
+        return `<div class="offer ${best?'best':''}">
+          <div class="row">
+            <div>
+              <div style="font-size:14px;font-weight:700">${esc(o.s)}${best?'<span class="tagbest">лучшая цена</span>':''}</div>
+              <div class="psku">📍 ${o.c} · обновлено ${o.u}</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-weight:800;font-size:${best?'17':'15'}px;${best?'color:var(--ink)':''}">${fmt(o.p)} ₸</div>
+              ${best?'':`<div style="font-size:11px;color:var(--red);font-weight:600">+${d}% к мин.</div>`}
+            </div>
+          </div>
+          <div class="bar"><div style="width:${Math.max(8,100-d*4)}%"></div></div>
+          <div class="meta">
+            ${o.st?'<span class="badge b-green">✓ в наличии</span>':'<span class="badge b-red">под заказ</span>'}
+            <div class="acts"><button class="mini" onclick="toast('Контакт поставщика — в полной версии')">📞 Контакт</button>
+            <button class="mini" onclick="toast('Ссылка на сайт — в полной версии')">↗ Сайт</button></div>
+          </div>
+        </div>`;}).join('')}
+    </div>
+    <div class="fab"><button class="${inPr?'done':''}" onclick="addToProject(${p.id})">
+      ${inPr?'✓ В подборке «'+esc(S.project.name)+'»':'+ Добавить в подборку проекта'}</button></div>`;
+}
+function backFromProduct(){ S.view = S.view.back || {name:'home'}; render(); }
+function toggleFav(id){
+  haptic('medium');
+  S.favorites = S.favorites.includes(id) ? S.favorites.filter(x=>x!==id) : [...S.favorites, id];
+  render();
+}
+function addToProject(id){
+  if (!S.project.items.some(i=>i.pid===id)){
+    S.project.items.push({pid:id, qty:1});
+    haptic('medium');
+    toast('Добавлено в «'+S.project.name+'»');
+  }
+  render();
+}
+
+function openFilters(){
+  haptic();
+  const f = {...S.filters};
+  const draw = () => {
+    overlay.innerHTML = `
+      <div class="sheet-bg" onclick="closeSheet()"></div>
+      <div class="sheet">
+        <h3>Фильтры</h3>
+        <div class="section-label" style="margin-top:0">Город</div>
+        <div class="pillrow">${['Все города','Астана','Алматы'].map(c=>
+          `<button class="pill ${f.city===c?'on':''}" data-city="${c}">${c}</button>`).join('')}</div>
+        <div class="section-label">Наличие</div>
+        <div class="switchrow" id="stockRow">
+          <span style="font-size:14px">Только в наличии</span>
+          <span class="sw ${f.inStock?'on':''}"><i></i></span>
+        </div>
+        <button class="btn btn-orange" style="width:100%;padding:13px;border-radius:14px;font-size:14px" id="applyF">Показать результаты</button>
+      </div>`;
+    overlay.querySelectorAll('[data-city]').forEach(b=>b.onclick=()=>{f.city=b.dataset.city; draw();});
+    overlay.querySelector('#stockRow').onclick=()=>{f.inStock=!f.inStock; draw();};
+    overlay.querySelector('#applyF').onclick=()=>{S.filters=f; closeSheet(); render();};
+  };
+  draw();
+}
+function closeSheet(){ overlay.innerHTML=''; }
+
+function renderFavs(){
+  const favs = PRODUCTS.filter(p=>S.favorites.includes(p.id));
+  app.innerHTML = `<div class="wrap"><h1>Избранное</h1>
+    ${favs.length?'':'<div class="empty"><div class="big">♡</div><div class="t">Пока пусто</div><div class="s">Нажмите ♡ в карточке товара, чтобы следить за ценой.</div></div>'}
+    <div style="margin-top:14px">
+    ${favs.map(p=>{const mn=Math.min(...p.offers.map(o=>o.p));
+      return `<div class="card" onclick="openProduct(${p.id})"><div class="row">
+        <div><div class="pname">${esc(p.name)}</div><div class="psku">${p.offers.length} поставщика</div></div>
+        <div class="pprice">от ${fmt(mn)} ₸</div></div></div>`;}).join('')}
+    </div></div>`;
+}
+
+function renderProject(){
+  const rows = S.project.items.map(it=>{
+    const p = PRODUCTS.find(x=>x.id===it.pid);
+    const best = [...p.offers].sort((a,b)=>a.p-b.p)[0];
+    return {...it, p, best, sum: best.p*it.qty};
+  });
+  const total = rows.reduce((s,r)=>s+r.sum,0);
+  app.innerHTML = `<div class="wrap">
+    <div class="row" style="align-items:baseline"><h1>${esc(S.project.name)}</h1><span class="badge b-orange">подборка</span></div>
+    <div class="sub">${rows.length} позиции · цены лучших предложений</div>
+    <div style="margin-top:14px">
+    ${rows.length?'':'<div class="empty"><div class="big">▣</div><div class="t">Подборка пуста</div><div class="s">Найдите товар и добавьте его в подборку.</div></div>'}
+    ${rows.map(r=>`<div class="card" style="cursor:default">
+      <div onclick="openProduct(${r.pid})" style="cursor:pointer">
+        <div class="pname">${esc(r.p.name)}</div>
+        <div class="psku">${esc(r.best.s)} · ${fmt(r.best.p)} ₸/${r.p.unit}</div>
+      </div>
+      <div class="meta">
+        <div class="qty">
+          <button onclick="chQty(${r.pid},-1)">−</button>
+          <span>${r.qty} ${r.p.unit}</span>
+          <button onclick="chQty(${r.pid},1)">+</button>
+        </div>
+        <div class="pprice">${fmt(r.sum)} ₸</div>
+      </div></div>`).join('')}
+    </div>
+    ${rows.length?`
+      <div class="total"><span class="l">Итого по подборке</span><span class="v">${fmt(total)} ₸</span></div>
+      <div class="grid3">
+        <div class="exp" onclick="toast('Excel-спецификация — в полной версии')"><span class="i">📊</span>Excel</div>
+        <div class="exp" onclick="toast('PDF-спецификация — в полной версии')"><span class="i">📄</span>PDF</div>
+        <div class="exp" onclick="sendToClient()"><span class="i">✈</span>Клиенту</div>
+      </div>`:''}
+  </div>`;
+}
+function chQty(pid,d){
+  haptic();
+  S.project.items = S.project.items
+    .map(i=>i.pid===pid?{...i,qty:Math.max(0,i.qty+d)}:i)
+    .filter(i=>i.qty>0);
+  render();
+}
+function sendToClient(){
+  // Демо: формируем текст спецификации и отправляем через Telegram share
+  const rows = S.project.items.map(it=>{
+    const p = PRODUCTS.find(x=>x.id===it.pid);
+    const best = [...p.offers].sort((a,b)=>a.p-b.p)[0];
+    return `· ${p.name} — ${it.qty} ${p.unit} × ${fmt(best.p)} ₸ = ${fmt(best.p*it.qty)} ₸`;
+  });
+  const total = S.project.items.reduce((s,it)=>{
+    const p = PRODUCTS.find(x=>x.id===it.pid);
+    return s + [...p.offers].sort((a,b)=>a.p-b.p)[0].p*it.qty;
+  },0);
+  const text = `Спецификация «${S.project.name}»\n\n${rows.join('\n')}\n\nИтого: ${fmt(total)} ₸`;
+  if (tg) tg.openTelegramLink('https://t.me/share/url?url=&text='+encodeURIComponent(text));
+  else toast('Отправка работает внутри Telegram');
+}
+
+function renderProfile(){
+  app.innerHTML = `<div class="wrap"><h1>Профиль</h1>
+    <div class="card" style="cursor:default;margin-top:14px;display:flex;gap:12px;align-items:center">
+      <div style="width:48px;height:48px;border-radius:14px;background:var(--orange-soft);color:#9a3a0e;
+        display:flex;align-items:center;justify-content:center;font-weight:800">${esc(userName[0]||'Г')}</div>
+      <div><div style="font-weight:700;font-size:14px">${esc(userName)}</div>
+      <div class="sub">${user?'Telegram ID: '+user.id:'Откройте через Telegram'}</div></div>
+    </div>
+    <div class="card" style="cursor:default;padding:0">
+      ${[['История поиска', S.recent.length+' запросов'],['Мои подборки','1 проект'],
+         ['Уведомления о ценах', S.favorites.length+' товара'],['Стать поставщиком','загрузка прайса']]
+        .map(([t,s],i)=>`<div onclick="toast('Раздел — в полной версии')" style="display:flex;justify-content:space-between;
+          padding:14px;cursor:pointer;${i?'border-top:1px solid #f1efec':''}">
+          <span style="font-size:14px">${t}</span><span class="sub">${s}</span></div>`).join('')}
+    </div>
+    <div class="card" style="cursor:default;background:var(--orange-soft);border-color:#f5cdb6">
+      <div style="font-weight:700;font-size:14px;color:#9a3a0e">★ KOMPLEKT Pro</div>
+      <div style="font-size:12px;color:#9a3a0e;margin-top:4px">Брендированные PDF-спецификации, история цен и безлимитные подборки — 4 900 ₸/мес.</div>
+    </div>
+  </div>`;
+}
+
+let toastTimer;
+function toast(msg){
+  clearTimeout(toastTimer);
+  let t = document.querySelector('.toast');
+  if (t) t.remove();
+  t = document.createElement('div');
+  t.className='toast'; t.innerHTML=`<div>${esc(msg)}</div>`;
+  document.body.appendChild(t);
+  toastTimer = setTimeout(()=>t.remove(), 1800);
+}
+
+render();
+</script>
+</body>
+</html>
