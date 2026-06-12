@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<!-- saved from url=(0053)file:///C:/Users/MEISO-ARCH-1/Downloads/supplier.html -->
-<html lang="ru"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>КОМПЛЕКТ — кабинет поставщика</title>
-<script src="./КОМПЛЕКТ — кабинет поставщика_files/supabase-js@2"></script>
 <style>
   :root{
     --ink:#1b1d1c; --paper:#f7f6f4; --card:#ffffff; --line:#e6e4e1;
@@ -75,13 +74,13 @@
 </div></div>
 
 <!-- ВХОД / РЕГИСТРАЦИЯ -->
-<div id="authView" class="wrap"><div class="narrow">
+<div id="authView" class="wrap hidden"><div class="narrow">
   <h1>Кабинет поставщика</h1>
   <div class="sub">Размещайте товары и цены — их увидят дизайнеры, комплектаторы и прорабы в приложении КОМПЛЕКТ.</div>
   <div class="card">
     <div class="tabs">
-      <button id="tabLogin" class="on" onclick="setMode(&#39;login&#39;)">Вход</button>
-      <button id="tabReg" onclick="setMode(&#39;reg&#39;)">Регистрация</button>
+      <button id="tabLogin" class="on" onclick="setMode('login')">Вход</button>
+      <button id="tabReg" onclick="setMode('reg')">Регистрация</button>
     </div>
 
     <div id="regFields" class="hidden">
@@ -179,17 +178,10 @@
 </div>
 
 <script>
-if (typeof supabase === 'undefined') {
-  document.addEventListener('DOMContentLoaded', () => {
-    document.body.insertAdjacentHTML('beforeend',
-      '<div style="max-width:440px;margin:60px auto;padding:22px;background:#fbeceb;color:#b3433b;border-radius:14px;font:14px sans-serif">'+
-      'Не удалось загрузить библиотеку подключения. Проверьте интернет и обновите страницу.</div>');
-  });
-  throw new Error('supabase-js CDN not loaded');
-}
+let db = null;
 const SUPABASE_URL = 'https://xncupkiiuhpcsficvnbr.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_JQbHRW_HEfVPsRcz47vOUw_IfadAlt5';
-const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// db создаётся после загрузки библиотеки (см. initLib в конце файла)
 
 let mode = 'login';
 let me = null;          // auth user
@@ -365,9 +357,36 @@ async function delProduct(pid){
   await loadProducts();
 }
 
+// ───── загрузка библиотеки: пробуем несколько источников ─────
+const CDN_URLS = [
+  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js',
+  'https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js',
+];
+function loadScript(src){
+  return new Promise((res, rej) => {
+    const s = document.createElement('script');
+    s.src = src; s.onload = res; s.onerror = rej;
+    document.head.appendChild(s);
+  });
+}
+async function initLib(){
+  if (!window.supabase){
+    for (const url of CDN_URLS){
+      try { await loadScript(url); if (window.supabase) break; } catch(e){}
+    }
+  }
+  if (!window.supabase){
+    show('authView');
+    msg('authMsg','Не загрузилась библиотека подключения. Чаще всего её блокирует расширение браузера (блокировщик рекламы) — отключите его для этой страницы и обновите. Либо проверьте интернет.');
+    $('authBtn').disabled = true;
+    return false;
+  }
+  db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  return true;
+}
+
 setMode('login');
-boot();
+initLib().then(ok => { if (ok) boot(); });
 </script>
-
-
-</body></html>
+</body>
+</html>
