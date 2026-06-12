@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>КОМПЛЕКТ — админ-панель</title>
+<style>
+  :root{
+    --ink:#1b1d1c; --paper:#f7f6f4; --card:#ffffff; --line:#e6e4e1;
+    --gray:#6b6f6d; --orange:#e84e0f; --orange-soft:#fdede4;
+    --green:#1f7a4d; --green-soft:#e8f5ee; --red:#b3433b; --red-soft:#fbeceb;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    background:var(--paper); color:var(--ink); min-height:100vh;}
+  .tape{height:5px; background:repeating-linear-gradient(135deg,var(--orange) 0 16px,var(--ink) 16px 32px);}
+  .topbar{background:#fff; border-bottom:1px solid var(--line); padding:14px 0;}
+  .topbar .in{max-width:980px; margin:0 auto; padding:0 20px; display:flex; align-items:center; gap:12px;}
+  .logo{font-size:19px; font-weight:800;}
+  .logo small{font-weight:600; color:var(--gray); margin-left:8px;}
+  .wrap{max-width:980px; margin:0 auto; padding:28px 20px 60px;}
+  .narrow{max-width:420px; margin:48px auto;}
+  h1{font-size:24px; margin:0 0 6px;}
+  .sub{color:var(--gray); font-size:13px; margin-bottom:20px;}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:22px;}
+  label{display:block; font-size:12px; font-weight:700; color:var(--gray); margin:14px 0 5px; text-transform:uppercase; letter-spacing:.6px;}
+  input{width:100%; border:1px solid var(--line); border-radius:12px; padding:11px 13px; font-size:14px; outline:none;}
+  input:focus{border-color:var(--orange);}
+  .btn{display:inline-block; border:none; border-radius:12px; padding:11px 16px; font-size:13px;
+    font-weight:700; cursor:pointer; background:var(--ink); color:#fff;}
+  .btn-orange{background:var(--orange);}
+  .btn-green{background:var(--green);}
+  .btn-red{background:var(--red);}
+  .btn-ghost{background:#efedea; color:var(--ink);}
+  .btn-sm{padding:7px 12px; font-size:12px; border-radius:10px;}
+  .btn:disabled{opacity:.5; cursor:default;}
+  .full{width:100%; margin-top:20px;}
+  .msg{margin-top:14px; font-size:13px; border-radius:10px; padding:10px 12px; display:none;}
+  .msg.err{display:block; background:var(--red-soft); color:var(--red);}
+  .msg.ok{display:block; background:var(--green-soft); color:var(--green);}
+  .badge{font-size:11px; font-weight:700; border-radius:999px; padding:4px 10px;}
+  .b-green{background:var(--green-soft); color:var(--green);}
+  .b-red{background:var(--red-soft); color:var(--red);}
+  .b-orange{background:var(--orange-soft); color:#9a3a0e;}
+  .tabs{display:flex; gap:6px; margin:0 0 18px;}
+  .tabs button{border:1px solid var(--line); background:#fff; border-radius:12px;
+    padding:9px 16px; font-size:13px; font-weight:700; cursor:pointer; color:var(--gray);}
+  .tabs button.on{background:var(--ink); color:#fff; border-color:var(--ink);}
+  .app{border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:10px; background:#fff;
+    display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap; align-items:center;}
+  .app .info{flex:1; min-width:240px;}
+  .app .nm{font-weight:800; font-size:15px;}
+  .app .d{font-size:12px; color:var(--gray); margin-top:4px; line-height:1.6;}
+  .hidden{display:none !important;}
+  .empty{text-align:center; color:var(--gray); padding:30px; font-size:13px;}
+</style>
+</head>
+<body>
+<div class="tape"></div>
+<div class="topbar"><div class="in">
+  <span class="logo">КОМПЛЕКТ <small>админ-панель</small></span>
+  <span style="flex:1"></span>
+  <span id="who" class="sub" style="margin:0"></span>
+  <button id="logoutBtn" class="btn btn-ghost btn-sm hidden" onclick="logout()">Выйти</button>
+</div></div>
+
+<!-- ВХОД -->
+<div id="authView" class="wrap hidden"><div class="narrow">
+  <h1>Вход для администратора</h1>
+  <div class="sub">Доступ только для аккаунтов с ролью «admin».</div>
+  <div class="card">
+    <label>Email</label>
+    <input id="aEmail" type="email" autocomplete="username">
+    <label>Пароль</label>
+    <input id="aPass" type="password" autocomplete="current-password">
+    <button class="btn btn-orange full" id="authBtn" onclick="login()">Войти</button>
+    <div id="authMsg" class="msg"></div>
+  </div>
+</div></div>
+
+<!-- ПАНЕЛЬ -->
+<div id="panelView" class="wrap hidden">
+  <h1>Поставщики</h1>
+  <div class="sub">Заявки на размещение и действующие компании.</div>
+  <div class="tabs">
+    <button id="tPending" class="on" onclick="setTab('pending')">Заявки <span id="cntPending" class="badge b-orange">0</span></button>
+    <button id="tApproved" onclick="setTab('approved')">Одобренные</button>
+    <button id="tRejected" onclick="setTab('rejected')">Отклонённые</button>
+  </div>
+  <div id="list"></div>
+  <div id="panelMsg" class="msg"></div>
+</div>
+
+<script>
+let db = null;
+const SUPABASE_URL = 'https://xncupkiiuhpcsficvnbr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_JQbHRW_HEfVPsRcz47vOUw_IfadAlt5';
+
+let tab = 'pending';
+let rows = [];
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+const show = id => ['authView','panelView'].forEach(v => $(v).classList.toggle('hidden', v!==id));
+function msg(id, text, ok=false){ const m=$(id); m.textContent=text; m.className='msg '+(ok?'ok':'err'); }
+function clearMsg(id){ $(id).className='msg'; }
+
+async function login(){
+  clearMsg('authMsg');
+  $('authBtn').disabled = true;
+  try{
+    const { error } = await db.auth.signInWithPassword({ email:$('aEmail').value.trim(), password:$('aPass').value });
+    if(error) throw error;
+    await boot();
+  }catch(e){
+    msg('authMsg', /Invalid login/i.test(e.message) ? 'Неверный email или пароль' : e.message);
+  }finally{ $('authBtn').disabled = false; }
+}
+
+async function logout(){ await db.auth.signOut(); location.reload(); }
+
+async function boot(){
+  const { data:{ user } } = await db.auth.getUser();
+  $('logoutBtn').classList.toggle('hidden', !user);
+  $('who').textContent = user ? (user.email||'') : '';
+  if(!user){ show('authView'); return; }
+
+  const { data:prof } = await db.from('profiles').select('role').eq('id', user.id).single();
+  if(!prof || prof.role!=='admin'){
+    show('authView');
+    msg('authMsg','У этого аккаунта нет прав администратора.');
+    await db.auth.signOut();
+    $('logoutBtn').classList.add('hidden'); $('who').textContent='';
+    return;
+  }
+  show('panelView');
+  await load();
+}
+
+function setTab(t){
+  tab = t;
+  $('tPending').classList.toggle('on', t==='pending');
+  $('tApproved').classList.toggle('on', t==='approved');
+  $('tRejected').classList.toggle('on', t==='rejected');
+  renderList();
+}
+
+async function load(){
+  clearMsg('panelMsg');
+  const { data, error } = await db.from('profiles')
+    .select('id,role,status,full_name,company,city,phone,email,created_at')
+    .eq('role','supplier').order('created_at',{ascending:false});
+  if(error){ msg('panelMsg','Ошибка загрузки: '+error.message); return; }
+  rows = data || [];
+  $('cntPending').textContent = rows.filter(r=>r.status==='pending').length;
+  renderList();
+}
+
+function renderList(){
+  const list = rows.filter(r=>r.status===tab);
+  if(!list.length){
+    $('list').innerHTML = `<div class="card empty">${
+      tab==='pending' ? 'Новых заявок нет.' : tab==='approved' ? 'Одобренных поставщиков пока нет.' : 'Отклонённых нет.'
+    }</div>`;
+    return;
+  }
+  $('list').innerHTML = list.map(r=>`
+    <div class="app">
+      <div class="info">
+        <div class="nm">${esc(r.company||'Без названия')}</div>
+        <div class="d">
+          ${esc(r.full_name||'—')} · ${esc(r.city||'—')}<br>
+          ${esc(r.email||'')}${r.phone?' · '+esc(r.phone):''}<br>
+          заявка от ${new Date(r.created_at).toLocaleDateString('ru-RU')}
+        </div>
+      </div>
+      <div style="display:flex; gap:8px">
+        ${tab!=='approved' ? `<button class="btn btn-green btn-sm" onclick="setStatus('${r.id}','approved')">✓ Одобрить</button>` : ''}
+        ${tab!=='rejected' ? `<button class="btn btn-red btn-sm" onclick="setStatus('${r.id}','rejected')">✕ Отклонить</button>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+async function setStatus(id, status){
+  clearMsg('panelMsg');
+  const { error } = await db.from('profiles').update({ status }).eq('id', id);
+  if(error){ msg('panelMsg','Ошибка: '+error.message); return; }
+  msg('panelMsg', status==='approved' ? 'Поставщик одобрен ✓' : 'Заявка отклонена', true);
+  setTimeout(()=>clearMsg('panelMsg'), 1800);
+  await load();
+}
+
+/* ───── загрузчик библиотеки: два источника ───── */
+const CDN_URLS = [
+  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js',
+  'https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js',
+];
+function loadScript(src){
+  return new Promise((res, rej) => {
+    const s=document.createElement('script'); s.src=src; s.onload=res; s.onerror=rej;
+    document.head.appendChild(s);
+  });
+}
+async function initLib(){
+  if(!window.supabase){
+    for(const u of CDN_URLS){ try{ await loadScript(u); if(window.supabase) break; }catch(e){} }
+  }
+  if(!window.supabase){
+    show('authView');
+    msg('authMsg','Не загрузилась библиотека подключения. Отключите блокировщик рекламы для этой страницы и обновите её.');
+    $('authBtn').disabled=true;
+    return false;
+  }
+  db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  return true;
+}
+initLib().then(ok=>{ if(ok) boot(); });
+</script>
+</body>
+</html>
