@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<!-- saved from url=(0053)file:///C:/Users/MEISO-ARCH-1/Downloads/supplier.html -->
+<html lang="ru"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>КОМПЛЕКТ — кабинет поставщика</title>
+<script src="./КОМПЛЕКТ — кабинет поставщика_files/supabase-js@2"></script>
+<style>
+  :root{
+    --ink:#1b1d1c; --paper:#f7f6f4; --card:#ffffff; --line:#e6e4e1;
+    --gray:#6b6f6d; --orange:#e84e0f; --orange-soft:#fdede4;
+    --green:#1f7a4d; --green-soft:#e8f5ee; --red:#b3433b; --red-soft:#fbeceb;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    background:var(--paper); color:var(--ink); min-height:100vh;}
+  .tape{height:5px; background:repeating-linear-gradient(135deg,var(--orange) 0 16px,var(--ink) 16px 32px);}
+  .topbar{background:#fff; border-bottom:1px solid var(--line); padding:14px 0;}
+  .topbar .in{max-width:980px; margin:0 auto; padding:0 20px; display:flex; align-items:center; gap:12px;}
+  .logo{font-size:19px; font-weight:800; letter-spacing:.5px;}
+  .logo small{font-weight:600; color:var(--gray); margin-left:8px; letter-spacing:0;}
+  .wrap{max-width:980px; margin:0 auto; padding:28px 20px 60px;}
+  .narrow{max-width:440px; margin:48px auto;}
+  h1{font-size:24px; margin:0 0 6px;}
+  h2{font-size:17px; margin:0 0 12px;}
+  .sub{color:var(--gray); font-size:13px; margin-bottom:20px;}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:22px;}
+  label{display:block; font-size:12px; font-weight:700; color:var(--gray); margin:14px 0 5px; text-transform:uppercase; letter-spacing:.6px;}
+  input, select{width:100%; border:1px solid var(--line); border-radius:12px; padding:11px 13px;
+    font-size:14px; background:#fff; outline:none;}
+  input:focus, select:focus{border-color:var(--orange);}
+  .btn{display:inline-block; border:none; border-radius:12px; padding:12px 18px; font-size:14px;
+    font-weight:700; cursor:pointer; background:var(--ink); color:#fff;}
+  .btn-orange{background:var(--orange);}
+  .btn-ghost{background:#efedea; color:var(--ink);}
+  .btn-sm{padding:7px 12px; font-size:12px; border-radius:10px;}
+  .btn:disabled{opacity:.5; cursor:default;}
+  .full{width:100%; margin-top:20px;}
+  .tabs{display:flex; gap:6px; margin-bottom:18px;}
+  .tabs button{flex:1; border:1px solid var(--line); background:#fff; border-radius:12px;
+    padding:10px; font-size:13px; font-weight:700; cursor:pointer; color:var(--gray);}
+  .tabs button.on{background:var(--ink); color:#fff; border-color:var(--ink);}
+  .msg{margin-top:14px; font-size:13px; border-radius:10px; padding:10px 12px; display:none;}
+  .msg.err{display:block; background:var(--red-soft); color:var(--red);}
+  .msg.ok{display:block; background:var(--green-soft); color:var(--green);}
+  .badge{font-size:11px; font-weight:700; border-radius:999px; padding:4px 10px;}
+  .b-green{background:var(--green-soft); color:var(--green);}
+  .b-red{background:var(--red-soft); color:var(--red);}
+  .b-orange{background:var(--orange-soft); color:#9a3a0e;}
+  table{width:100%; border-collapse:collapse; font-size:13px;}
+  th{font-size:11px; text-transform:uppercase; letter-spacing:.6px; color:var(--gray);
+    text-align:left; padding:8px 10px; border-bottom:1px solid var(--line);}
+  td{padding:10px; border-bottom:1px solid #f1efec; vertical-align:middle;}
+  td input{padding:7px 9px; font-size:13px; border-radius:9px;}
+  .price-inp{width:110px;}
+  .row{display:flex; gap:14px;}
+  .row > *{flex:1;}
+  .head{display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;}
+  .hidden{display:none !important;}
+  .thumb{width:42px; height:42px; border-radius:9px; background:#eceae7; background-size:cover; background-position:center;}
+  .wait{ text-align:center; padding:46px 26px;}
+  .wait .ic{font-size:40px;}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:0 16px;}
+  @media (max-width:640px){ .grid2{grid-template-columns:1fr;} .row{flex-direction:column; gap:0;} }
+  .note{font-size:12px; color:var(--gray); margin-top:10px; line-height:1.5;}
+</style>
+</head>
+<body>
+<div class="tape"></div>
+<div class="topbar"><div class="in">
+  <span class="logo">КОМПЛЕКТ <small>кабинет поставщика</small></span>
+  <span style="flex:1"></span>
+  <span id="who" class="sub" style="margin:0"></span>
+  <button id="logoutBtn" class="btn btn-ghost btn-sm hidden" onclick="logout()">Выйти</button>
+</div></div>
+
+<!-- ВХОД / РЕГИСТРАЦИЯ -->
+<div id="authView" class="wrap"><div class="narrow">
+  <h1>Кабинет поставщика</h1>
+  <div class="sub">Размещайте товары и цены — их увидят дизайнеры, комплектаторы и прорабы в приложении КОМПЛЕКТ.</div>
+  <div class="card">
+    <div class="tabs">
+      <button id="tabLogin" class="on" onclick="setMode(&#39;login&#39;)">Вход</button>
+      <button id="tabReg" onclick="setMode(&#39;reg&#39;)">Регистрация</button>
+    </div>
+
+    <div id="regFields" class="hidden">
+      <label>Название компании *</label>
+      <input id="rCompany" placeholder="ТОО «СтройМир»">
+      <div class="grid2">
+        <div><label>Контактное лицо *</label><input id="rName" placeholder="Имя Фамилия"></div>
+        <div><label>Город *</label>
+          <select id="rCity"><option>Астана</option><option>Алматы</option><option>Шымкент</option><option>Караганда</option><option>Атырау</option><option>Другой</option></select>
+        </div>
+      </div>
+      <label>Телефон</label>
+      <input id="rPhone" placeholder="+7 7__ ___ __ __">
+    </div>
+
+    <label>Email *</label>
+    <input id="aEmail" type="email" placeholder="you@company.kz" autocomplete="username">
+    <label>Пароль *</label>
+    <input id="aPass" type="password" placeholder="минимум 6 символов" autocomplete="current-password">
+
+    <button class="btn btn-orange full" id="authBtn" onclick="submitAuth()">Войти</button>
+    <div id="authMsg" class="msg"></div>
+    <div class="note" id="regNote" style="display:none">
+      После регистрации заявка попадает на проверку администратору.
+      Добавлять товары можно будет после одобрения — обычно это занимает до 1 рабочего дня.
+    </div>
+  </div>
+</div></div>
+
+<!-- ОЖИДАНИЕ ОДОБРЕНИЯ -->
+<div id="pendingView" class="wrap hidden"><div class="narrow">
+  <div class="card wait">
+    <div class="ic">⏳</div>
+    <h2 style="margin-top:10px">Заявка на проверке</h2>
+    <div class="sub" style="margin-bottom:6px">
+      Мы получили вашу регистрацию и проверяем компанию.<br>
+      После одобрения здесь откроется управление товарами.
+    </div>
+  </div>
+</div></div>
+
+<!-- ОТКЛОНЁН -->
+<div id="rejectedView" class="wrap hidden"><div class="narrow">
+  <div class="card wait">
+    <div class="ic">✕</div>
+    <h2 style="margin-top:10px">Заявка отклонена</h2>
+    <div class="sub" style="margin-bottom:6px">Если считаете это ошибкой — свяжитесь с поддержкой КОМПЛЕКТ.</div>
+  </div>
+</div></div>
+
+<!-- КАБИНЕТ -->
+<div id="cabinetView" class="wrap hidden">
+  <div class="head">
+    <div>
+      <h1 id="cabCompany">Мои товары</h1>
+      <div class="sub" style="margin:0"><span class="badge b-green">✓ поставщик одобрен</span></div>
+    </div>
+    <button class="btn btn-orange" onclick="toggleAdd(true)">+ Добавить товар</button>
+  </div>
+
+  <!-- форма добавления -->
+  <div id="addCard" class="card hidden" style="margin-bottom:18px">
+    <h2>Новый товар</h2>
+    <div class="grid2">
+      <div><label>Название *</label><input id="pName" placeholder="Керамогранит … 60×60"></div>
+      <div><label>Артикул</label><input id="pSku" placeholder="ABC-123"></div>
+      <div><label>Категория *</label><select id="pCat"></select></div>
+      <div><label>Ед. изм.</label>
+        <select id="pUnit"><option>шт</option><option>м²</option><option>м</option><option>л</option><option>кг</option><option>упак</option></select>
+      </div>
+      <div><label>Цена, ₸ *</label><input id="pPrice" type="text" inputmode="decimal" placeholder="4500"></div>
+      <div><label>Наличие</label>
+        <select id="pStock"><option value="true">В наличии</option><option value="false">Под заказ</option></select>
+      </div>
+    </div>
+    <label>Ссылка на фото товара (необязательно)</label>
+    <input id="pImg" placeholder="https://…/photo.jpg">
+    <div style="margin-top:18px; display:flex; gap:10px">
+      <button class="btn btn-orange" id="saveBtn" onclick="saveProduct()">Сохранить</button>
+      <button class="btn btn-ghost" onclick="toggleAdd(false)">Отмена</button>
+    </div>
+    <div id="addMsg" class="msg"></div>
+  </div>
+
+  <div class="card" style="padding:10px 14px">
+    <table>
+      <thead><tr>
+        <th></th><th>Товар</th><th>Артикул</th><th>Цена, ₸</th><th>Наличие</th><th></th>
+      </tr></thead>
+      <tbody id="prodRows"><tr><td colspan="6" style="text-align:center;color:var(--gray);padding:26px">Загрузка…</td></tr></tbody>
+    </table>
+  </div>
+  <div class="note">Цена сохраняется по кнопке «✓» в строке. Дата обновления цены проставляется автоматически — её видят покупатели.</div>
+  <div id="cabMsg" class="msg"></div>
+</div>
+
+<script>
+if (typeof supabase === 'undefined') {
+  document.addEventListener('DOMContentLoaded', () => {
+    document.body.insertAdjacentHTML('beforeend',
+      '<div style="max-width:440px;margin:60px auto;padding:22px;background:#fbeceb;color:#b3433b;border-radius:14px;font:14px sans-serif">'+
+      'Не удалось загрузить библиотеку подключения. Проверьте интернет и обновите страницу.</div>');
+  });
+  throw new Error('supabase-js CDN not loaded');
+}
+const SUPABASE_URL = 'https://xncupkiiuhpcsficvnbr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_JQbHRW_HEfVPsRcz47vOUw_IfadAlt5';
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let mode = 'login';
+let me = null;          // auth user
+let myProfile = null;   // строка из profiles
+let mySupplier = null;  // строка из suppliers
+let cats = [];
+
+const $ = id => document.getElementById(id);
+const show = id => ['authView','pendingView','rejectedView','cabinetView'].forEach(v => $(v).classList.toggle('hidden', v!==id));
+const esc = s => String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+function msg(id, text, ok=false){ const m=$(id); m.textContent=text; m.className='msg '+(ok?'ok':'err'); }
+function clearMsg(id){ $(id).className='msg'; }
+
+function setMode(m){
+  mode=m;
+  $('tabLogin').classList.toggle('on', m==='login');
+  $('tabReg').classList.toggle('on', m==='reg');
+  $('regFields').classList.toggle('hidden', m!=='reg');
+  $('regNote').style.display = m==='reg' ? 'block' : 'none';
+  $('authBtn').textContent = m==='login' ? 'Войти' : 'Зарегистрироваться';
+  clearMsg('authMsg');
+}
+
+async function submitAuth(){
+  clearMsg('authMsg');
+  const email=$('aEmail').value.trim(), pass=$('aPass').value;
+  if(!email || !pass) return msg('authMsg','Заполните email и пароль');
+  $('authBtn').disabled=true;
+  try{
+    if(mode==='reg'){
+      const company=$('rCompany').value.trim(), name=$('rName').value.trim();
+      if(!company || !name){ msg('authMsg','Заполните компанию и контактное лицо'); return; }
+      const { error } = await db.auth.signUp({ email, password: pass,
+        options:{ data:{ role:'supplier', full_name:name, company, city:$('rCity').value, phone:$('rPhone').value.trim() } } });
+      if(error) throw error;
+      msg('authMsg','Готово! Заявка отправлена на проверку.', true);
+      await boot();
+    } else {
+      const { error } = await db.auth.signInWithPassword({ email, password: pass });
+      if(error) throw error;
+      await boot();
+    }
+  }catch(e){
+    const t = /Invalid login/i.test(e.message) ? 'Неверный email или пароль'
+            : /already registered/i.test(e.message) ? 'Этот email уже зарегистрирован — войдите'
+            : /at least 6/i.test(e.message) ? 'Пароль должен быть не короче 6 символов'
+            : e.message;
+    msg('authMsg', t);
+  }finally{ $('authBtn').disabled=false; }
+}
+
+async function logout(){ await db.auth.signOut(); location.reload(); }
+
+async function boot(){
+  const { data:{ user } } = await db.auth.getUser();
+  me = user;
+  $('logoutBtn').classList.toggle('hidden', !me);
+  $('who').textContent = me ? (me.email||'') : '';
+  if(!me){ show('authView'); return; }
+
+  const { data:prof, error } = await db.from('profiles').select('*').eq('id', me.id).single();
+  if(error || !prof){ show('authView'); msg('authMsg','Профиль не найден — попробуйте войти заново'); return; }
+  myProfile = prof;
+
+  if(prof.role!=='supplier' && prof.role!=='admin'){
+    show('authView');
+    msg('authMsg','Этот кабинет — для поставщиков. Дизайнеры пользуются приложением в Telegram.');
+    await db.auth.signOut(); me=null; $('logoutBtn').classList.add('hidden');
+    return;
+  }
+  if(prof.status==='pending'){ show('pendingView'); return; }
+  if(prof.status==='rejected'){ show('rejectedView'); return; }
+
+  await ensureSupplier();
+  await loadCats();
+  await loadProducts();
+  $('cabCompany').textContent = mySupplier?.name || 'Мои товары';
+  show('cabinetView');
+}
+
+// карточка компании в suppliers: находим или создаём
+async function ensureSupplier(){
+  let { data } = await db.from('suppliers').select('*').eq('owner_id', me.id).limit(1);
+  if(data && data.length){ mySupplier = data[0]; return; }
+  const ins = await db.from('suppliers').insert({
+    name: myProfile.company || 'Без названия',
+    city: myProfile.city || '',
+    phone: myProfile.phone || '',
+    owner_id: me.id
+  }).select().single();
+  if(ins.error){ msg('cabMsg','Не удалось создать карточку компании: '+ins.error.message); return; }
+  mySupplier = ins.data;
+}
+
+async function loadCats(){
+  const { data } = await db.from('categories').select('slug,name').order('sort');
+  cats = data || [];
+  $('pCat').innerHTML = cats.map(c=>`<option value="${esc(c.slug)}">${esc(c.name)}</option>`).join('');
+}
+
+function toggleAdd(on){ $('addCard').classList.toggle('hidden', !on); clearMsg('addMsg'); }
+
+async function saveProduct(){
+  clearMsg('addMsg');
+  const name=$('pName').value.trim();
+  const price=parseFloat(String($('pPrice').value).replace(',','.'));
+  if(!name) return msg('addMsg','Укажите название товара');
+  if(isNaN(price) || price<=0) return msg('addMsg','Укажите корректную цену');
+  $('saveBtn').disabled=true;
+  try{
+    const p = await db.from('products').insert({
+      name, sku:$('pSku').value.trim()||null, unit:$('pUnit').value,
+      category_slug:$('pCat').value, image_url:$('pImg').value.trim()||null,
+      owner_id: me.id
+    }).select().single();
+    if(p.error) throw p.error;
+    const o = await db.from('offers').insert({
+      product_id:p.data.id, supplier_id:mySupplier.id,
+      price, in_stock: $('pStock').value==='true', owner_id: me.id
+    });
+    if(o.error) throw o.error;
+    ['pName','pSku','pPrice','pImg'].forEach(i=>$(i).value='');
+    msg('addMsg','Товар добавлен ✓', true);
+    await loadProducts();
+  }catch(e){ msg('addMsg','Ошибка: '+e.message); }
+  finally{ $('saveBtn').disabled=false; }
+}
+
+async function loadProducts(){
+  const { data, error } = await db.from('products')
+    .select('id,name,sku,unit,image_url,offers(id,price,in_stock,price_updated_at)')
+    .eq('owner_id', me.id).order('id', {ascending:false});
+  const tb = $('prodRows');
+  if(error){ tb.innerHTML=`<tr><td colspan="6" style="color:var(--red)">Ошибка загрузки: ${esc(error.message)}</td></tr>`; return; }
+  if(!data.length){ tb.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--gray);padding:26px">Товаров пока нет — добавьте первый.</td></tr>'; return; }
+  tb.innerHTML = data.map(p=>{
+    const o = (p.offers||[])[0] || {};
+    return `<tr>
+      <td><div class="thumb" style="${p.image_url?`background-image:url('${esc(p.image_url)}')`:''}"></div></td>
+      <td style="max-width:280px">${esc(p.name)}<div style="color:var(--gray);font-size:11px">${esc(p.unit)}</div></td>
+      <td>${esc(p.sku||'—')}</td>
+      <td><input class="price-inp" id="pr_${o.id}" value="${o.price??''}"></td>
+      <td>
+        <select id="st_${o.id}" style="width:auto">
+          <option value="true" ${o.in_stock?'selected':''}>В наличии</option>
+          <option value="false" ${!o.in_stock?'selected':''}>Под заказ</option>
+        </select>
+      </td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-sm" onclick="updOffer(${o.id})">✓</button>
+        <button class="btn btn-ghost btn-sm" onclick="delProduct(${p.id})">Удалить</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+async function updOffer(offerId){
+  clearMsg('cabMsg');
+  const price=parseFloat(String($('pr_'+offerId).value).replace(',','.'));
+  if(isNaN(price)||price<=0) return msg('cabMsg','Цена должна быть числом больше нуля');
+  const { error } = await db.from('offers').update({
+    price, in_stock: $('st_'+offerId).value==='true', price_updated_at:new Date().toISOString()
+  }).eq('id', offerId);
+  if(error) return msg('cabMsg','Ошибка: '+error.message);
+  msg('cabMsg','Сохранено ✓', true);
+  setTimeout(()=>clearMsg('cabMsg'),1500);
+}
+
+async function delProduct(pid){
+  if(!confirm('Удалить товар и его цену из каталога?')) return;
+  const { error } = await db.from('products').delete().eq('id', pid);
+  if(error) return msg('cabMsg','Ошибка: '+error.message);
+  await loadProducts();
+}
+
+setMode('login');
+boot();
+</script>
+
+
+</body></html>
