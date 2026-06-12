@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0052)file:///C:/Users/MEISO-ARCH-1/Downloads/index_2.html -->
-<html lang="ru" style="--tg-viewport-height: 100vh; --tg-viewport-stable-height: 100vh;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>КОМПЛЕКТ — цены на материалы</title>
-<script src="./index_files/telegram-web-app.js.загрузка"></script>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
   :root{
     --ink:#1b1d1c; --paper:#f7f6f4; --card:#ffffff; --line:#e6e4e1;
@@ -130,37 +130,8 @@
 </head>
 <body>
 <div class="tape"></div>
-<div id="app"><div class="wrap">
-    <div class="row" style="align-items:baseline">
-      <div><h1>КОМПЛЕКТ</h1><div class="sub">цены поставщиков · <span style="color:#1f7a4d">● база подключена</span></div></div>
-      <span class="badge b-orange">β Астана</span>
-    </div>
-    <div class="searchbar">
-      <span style="color:#a8a6a2">⌕</span>
-      <input id="q" placeholder="Название или артикул…" onkeydown="if(event.key===&#39;Enter&#39;)doSearch()">
-      <button class="btn" onclick="doSearch()">Найти</button>
-    </div>
-    <div class="section-label">Категории</div>
-    <div class="grid4"><div class="cat" onclick="openCat(&#39;tile&#39;)"><div class="em">▦</div><div class="nm">Керамогранит</div></div><div class="cat" onclick="openCat(&#39;laminate&#39;)"><div class="em">▤</div><div class="nm">Ламинат</div></div><div class="cat" onclick="openCat(&#39;paint&#39;)"><div class="em">◐</div><div class="nm">Краска</div></div><div class="cat" onclick="openCat(&#39;wallpaper&#39;)"><div class="em">▥</div><div class="nm">Обои</div></div><div class="cat" onclick="openCat(&#39;light&#39;)"><div class="em">✦</div><div class="nm">Освещение</div></div><div class="cat" onclick="openCat(&#39;electric&#39;)"><div class="em">⚡</div><div class="nm">Электрика</div></div><div class="cat" onclick="openCat(&#39;plumbing&#39;)"><div class="em">◉</div><div class="nm">Сантехника</div></div><div class="cat" onclick="openCat(&#39;doors&#39;)"><div class="em">▯</div><div class="nm">Двери</div></div>
-    </div>
-    <div class="section-label">Недавно искали</div>
-      <div><button class="chip" onclick="searchFor(&#39;керамогранит 60х60&#39;)">⟲ керамогранит 60х60</button><button class="chip" onclick="searchFor(&#39;tikkurila&#39;)">⟲ tikkurila</button></div>
-    <div class="section-label">Цена снизилась</div>
-    <div class="card" onclick="openProduct(4)">
-      <div class="cardflex">
-        <div class="thumb-sm" style="background-image:url(&#39;data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22400%22%20height%3D%22300%22%3E%3Crect%20width%3D%22400%22%20height%3D%22300%22%20fill%3D%22%23b9874c%22%2F%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%2278%22%20height%3D%22300%22%20fill%3D%22%239b6c36%22%20opacity%3D%220.2%22%2F%3E%3Crect%20x%3D%2280%22%20y%3D%220%22%20width%3D%2278%22%20height%3D%22300%22%20fill%3D%22%239b6c36%22%20opacity%3D%220.4%22%2F%3E%3Crect%20x%3D%22160%22%20y%3D%220%22%20width%3D%2278%22%20height%3D%22300%22%20fill%3D%22%239b6c36%22%20opacity%3D%220.28%22%2F%3E%3Crect%20x%3D%22240%22%20y%3D%220%22%20width%3D%2278%22%20height%3D%22300%22%20fill%3D%22%239b6c36%22%20opacity%3D%220.5%22%2F%3E%3Crect%20x%3D%22320%22%20y%3D%220%22%20width%3D%2278%22%20height%3D%22300%22%20fill%3D%22%239b6c36%22%20opacity%3D%220.32%22%2F%3E%3C%2Fsvg%3E&#39;)"></div>
-        <div class="body"><div class="row"><div>
-          <div class="pname">Ламинат Kronospan Castello 8 мм</div>
-          <div class="psku">от 3 150 ₸/м² · −6% за неделю</div>
-        </div><span class="badge b-green">↓</span></div></div>
-      </div>
-    </div>
-  </div></div>
-<div class="nav" id="nav"><button class="on" onclick="goTab(&#39;search&#39;)">
-       <span class="i">⌕</span>Поиск</button><button class="" onclick="goTab(&#39;favs&#39;)">
-       <span class="dot">1</span><span class="i">♡</span>Избранное</button><button class="" onclick="goTab(&#39;project&#39;)">
-       <span class="dot">2</span><span class="i">▣</span>Подборки</button><button class="" onclick="goTab(&#39;profile&#39;)">
-       <span class="i">◉</span>Профиль</button></div>
+<div id="app"></div>
+<div class="nav" id="nav"></div>
 <div id="overlay"></div>
 
 <script>
@@ -227,6 +198,18 @@ async function sb(path){
   const r = await fetch(SUPABASE_URL + '/rest/v1/' + path, { headers: sbHeaders });
   if (!r.ok) throw new Error(r.status + ' ' + (await r.text()));
   return r.json();
+}
+
+// запись в базу: POST (insert) / PATCH (update) / DELETE
+async function sbw(method, path, body){
+  const r = await fetch(SUPABASE_URL + '/rest/v1/' + path, {
+    method,
+    headers: { ...sbHeaders, 'Content-Type':'application/json', Prefer:'return=representation' },
+    body: body ? JSON.stringify(body) : undefined
+  });
+  if (!r.ok) throw new Error(r.status + ' ' + (await r.text()));
+  const t = await r.text();
+  return t ? JSON.parse(t) : null;
 }
 
 // дата обновления цены -> "сегодня / вчера / N дней назад"
@@ -302,10 +285,35 @@ const S = {
   filters:{city:'Все города', inStock:false},
   recent:['керамогранит 60х60','tikkurila'],
   favorites:[2],
-  project:{name:'Кафе · Атырау', items:[{pid:1, qty:86},{pid:6, qty:14}]},
+  project:{id:null, name:'Кафе · Атырау', items:[{pid:1, qty:86},{pid:6, qty:14}]},
 };
 const user = tg?.initDataUnsafe?.user;
 const userName = user ? [user.first_name, user.last_name].filter(Boolean).join(' ') : 'Гость';
+const TG_ID = user?.id || 0;   // 0 — демо-пользователь (просмотр в браузере)
+
+/* ───────── Личные данные: избранное и подборка из базы ───────── */
+async function loadUserData(){
+  // избранное
+  const favs = await sb('favorites?select=product_id&user_tg_id=eq.' + TG_ID);
+  S.favorites = favs.map(f => f.product_id);
+
+  // подборка (первый проект пользователя; если нет — создастся при первом добавлении)
+  const projs = await sb('projects?select=id,name&user_tg_id=eq.' + TG_ID + '&order=id&limit=1');
+  if (projs.length){
+    S.project = { id: projs[0].id, name: projs[0].name, items: [] };
+    const items = await sb('project_items?select=product_id,qty&project_id=eq.' + projs[0].id);
+    S.project.items = items.map(i => ({ pid: i.product_id, qty: Number(i.qty) }));
+  } else {
+    S.project = { id: null, name: 'Мой проект', items: [] };
+  }
+}
+
+// проект в базе: находим или создаём (лениво, при первом добавлении)
+async function ensureProject(){
+  if (S.project.id) return;
+  const rows = await sbw('POST', 'projects', { user_tg_id: TG_ID, name: S.project.name });
+  S.project.id = rows[0].id;
+}
 
 /* ───────── Рендер ───────── */
 const app = document.getElementById('app');
@@ -487,14 +495,32 @@ function renderProduct(){
 function backFromProduct(){ S.view = S.view.back || {name:'home'}; render(); }
 function toggleFav(id){
   haptic('medium');
-  S.favorites = S.favorites.includes(id) ? S.favorites.filter(x=>x!==id) : [...S.favorites, id];
+  const adding = !S.favorites.includes(id);
+  S.favorites = adding ? [...S.favorites, id] : S.favorites.filter(x=>x!==id);
   render();
+  // запись в базу в фоне; при ошибке откатываем
+  (adding
+    ? sbw('POST', 'favorites', { user_tg_id: TG_ID, product_id: id })
+    : sbw('DELETE', `favorites?user_tg_id=eq.${TG_ID}&product_id=eq.${id}`)
+  ).catch(()=>{
+    S.favorites = adding ? S.favorites.filter(x=>x!==id) : [...S.favorites, id];
+    render(); toast('Не сохранилось — проверьте связь');
+  });
 }
 function addToProject(id){
   if (!S.project.items.some(i=>i.pid===id)){
     S.project.items.push({pid:id, qty:1});
     haptic('medium');
     toast('Добавлено в «'+S.project.name+'»');
+    (async()=>{
+      try{
+        await ensureProject();
+        await sbw('POST', 'project_items', { project_id: S.project.id, product_id: id, qty: 1 });
+      }catch(e){
+        S.project.items = S.project.items.filter(i=>i.pid!==id);
+        render(); toast('Не сохранилось — проверьте связь');
+      }
+    })();
   }
   render();
 }
@@ -585,6 +611,7 @@ function chQty(pid,d){
     .map(i=>i.pid===pid?{...i,qty:Math.max(0, Math.round((i.qty+d)*100)/100)}:i)
     .filter(i=>i.qty>0);
   render();
+  persistQty(pid);
 }
 function setQty(pid, val){
   // принимаем и 86, и 86,5 / 86.5
@@ -593,6 +620,16 @@ function setQty(pid, val){
   haptic();
   S.project.items = S.project.items.map(i=>i.pid===pid?{...i, qty: Math.round(n*100)/100}:i);
   render();
+  persistQty(pid);
+}
+// сохранение количества (или удаление позиции) в базу, в фоне
+function persistQty(pid){
+  if (!S.project.id) return; // проект ещё не создан в базе — нечего обновлять
+  const item = S.project.items.find(i=>i.pid===pid);
+  const req = item
+    ? sbw('PATCH', `project_items?project_id=eq.${S.project.id}&product_id=eq.${pid}`, { qty: item.qty })
+    : sbw('DELETE', `project_items?project_id=eq.${S.project.id}&product_id=eq.${pid}`);
+  req.catch(()=>toast('Не сохранилось — проверьте связь'));
 }
 function sendToClient(){
   // Демо: формируем текст спецификации и отправляем через Telegram share
@@ -646,6 +683,7 @@ function toast(msg){
 /* ───────── Запуск ───────── */
 app.innerHTML = '<div class="wrap" style="padding-top:80px;text-align:center;color:#6b6f6d">Загрузка каталога…</div>';
 loadData()
+  .then(() => loadUserData().catch(()=>{}))   // личные данные не критичны для показа каталога
   .then(render)
   .catch(err => {
     console.error('Supabase load failed:', err);
@@ -653,6 +691,5 @@ loadData()
     toast('База недоступна — показаны демо-данные');
   });
 </script>
-
-
-</body></html>
+</body>
+</html>
