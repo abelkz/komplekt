@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0053)file:///C:/Users/MEISO-ARCH-1/Downloads/komplekt.html -->
+<!-- saved from url=(0052)file:///C:/Users/MEISO-ARCH-1/Downloads/index_2.html -->
 <html lang="ru" style="--tg-viewport-height: 100vh; --tg-viewport-stable-height: 100vh;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>КОМПЛЕКТ — цены на материалы</title>
-<script src="./КОМПЛЕКТ — цены на материалы_files/telegram-web-app.js.загрузка"></script>
+<script src="./index_files/telegram-web-app.js.загрузка"></script>
 <style>
   :root{
     --ink:#1b1d1c; --paper:#f7f6f4; --card:#ffffff; --line:#e6e4e1;
@@ -132,7 +132,7 @@
 <div class="tape"></div>
 <div id="app"><div class="wrap">
     <div class="row" style="align-items:baseline">
-      <div><h1>КОМПЛЕКТ</h1><div class="sub">цены поставщиков · Казахстан</div></div>
+      <div><h1>КОМПЛЕКТ</h1><div class="sub">цены поставщиков · <span style="color:#1f7a4d">● база подключена</span></div></div>
       <span class="badge b-orange">β Астана</span>
     </div>
     <div class="searchbar">
@@ -169,14 +169,16 @@ const tg = window.Telegram?.WebApp;
 if (tg) { tg.ready(); tg.expand(); tg.setHeaderColor('#1b1d1c'); }
 const haptic = (t='light') => tg?.HapticFeedback?.impactOccurred(t);
 
-/* ───────── Данные (демо; в продакшене — запросы к backend API) ───────── */
-const CATS = [
+/* ───────── Данные ─────────
+   Ниже — демо-набор. Он используется как запасной вариант, если база
+   вдруг недоступна. При успешной загрузке его заменяют данные из Supabase. */
+let CATS = [
   {id:'tile', nm:'Керамогранит', em:'▦'}, {id:'laminate', nm:'Ламинат', em:'▤'},
   {id:'paint', nm:'Краска', em:'◐'}, {id:'wallpaper', nm:'Обои', em:'▥'},
   {id:'light', nm:'Освещение', em:'✦'}, {id:'electric', nm:'Электрика', em:'⚡'},
   {id:'plumbing', nm:'Сантехника', em:'◉'}, {id:'doors', nm:'Двери', em:'▯'},
 ];
-const PRODUCTS = [
+let PRODUCTS = [
   {id:1, cat:'tile', brand:'Cersanit', name:'Керамогранит Cersanit Concretehouse серый 29,7×59,8', sku:'C-CH4L092D', unit:'м²',
    offers:[
      {s:'Keramo City', c:'Астана', p:4290, st:true, u:'сегодня'},
@@ -214,6 +216,49 @@ const PRODUCTS = [
    ]},
 ];
 const fmt = n => n.toLocaleString('ru-RU');
+
+/* ───────── Подключение к базе Supabase ─────────
+   URL и publishable key — публичные значения, они и так уходят в браузер. */
+const SUPABASE_URL = 'https://xncupkiiuhpcsficvnbr.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_JQbHRW_HEfVPsRcz47vOUw_IfadAlt5';
+const sbHeaders = { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY };
+
+async function sb(path){
+  const r = await fetch(SUPABASE_URL + '/rest/v1/' + path, { headers: sbHeaders });
+  if (!r.ok) throw new Error(r.status + ' ' + (await r.text()));
+  return r.json();
+}
+
+// дата обновления цены -> "сегодня / вчера / N дней назад"
+function relDate(ts){
+  if(!ts) return '';
+  const days = Math.floor((Date.now() - new Date(ts)) / 86400000);
+  if (days <= 0) return 'сегодня';
+  if (days === 1) return 'вчера';
+  if (days < 5) return days + ' дня назад';
+  return days + ' дней назад';
+}
+
+// загрузка каталога из базы в тот же формат, что ждёт приложение
+let dataOk = false;
+async function loadData(){
+  const cats = await sb('categories?select=slug,name,emoji,sort&order=sort');
+  if (cats.length) CATS = cats.map(c => ({ id:c.slug, nm:c.name, em:c.emoji }));
+
+  const prods = await sb('products?select=id,name,sku,unit,image_url,color,category_slug,'
+    + 'brands(name),offers(price,in_stock,price_updated_at,suppliers(name,city))&order=id');
+  if (prods.length) PRODUCTS = prods.map(p => ({
+    id: p.id, cat: p.category_slug, brand: (p.brands && p.brands.name) || '',
+    name: p.name, sku: p.sku || '', unit: p.unit || 'шт',
+    color: p.color || null, img: p.image_url || null,
+    offers: (p.offers || []).map(o => ({
+      s: (o.suppliers && o.suppliers.name) || '',
+      c: (o.suppliers && o.suppliers.city) || '',
+      p: Number(o.price), st: o.in_stock, u: relDate(o.price_updated_at)
+    }))
+  }));
+  dataOk = true;
+}
 
 /* ───────── Картинка товара ─────────
    Демо: рисуем заглушку по категории материала.
@@ -297,7 +342,7 @@ function renderScreen(){
 function renderHome(){
   app.innerHTML = `<div class="wrap">
     <div class="row" style="align-items:baseline">
-      <div><h1>КОМПЛЕКТ</h1><div class="sub">цены поставщиков · Казахстан</div></div>
+      <div><h1>КОМПЛЕКТ</h1><div class="sub">цены поставщиков · ${dataOk?'<span style="color:#1f7a4d">● база подключена</span>':'<span style="color:#e84e0f">● демо-режим</span>'}</div></div>
       <span class="badge b-orange">β Астана</span>
     </div>
     <div class="searchbar">
@@ -598,7 +643,15 @@ function toast(msg){
   toastTimer = setTimeout(()=>t.remove(), 1800);
 }
 
-render();
+/* ───────── Запуск ───────── */
+app.innerHTML = '<div class="wrap" style="padding-top:80px;text-align:center;color:#6b6f6d">Загрузка каталога…</div>';
+loadData()
+  .then(render)
+  .catch(err => {
+    console.error('Supabase load failed:', err);
+    render();                                         // показываем демо как запас
+    toast('База недоступна — показаны демо-данные');
+  });
 </script>
 
 
