@@ -319,31 +319,46 @@ async function loadProducts(){
   if(!data.length){ tb.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--gray);padding:26px">Товаров пока нет — добавьте первый.</td></tr>'; return; }
   tb.innerHTML = data.map(p=>{
     const o = (p.offers||[])[0] || {};
+    const k = o.id || p.id;   // стабильный ключ для полей строки
     return `<tr>
       <td><div class="thumb" style="${p.image_url?`background-image:url('${esc(p.image_url)}')`:''}"></div></td>
       <td style="max-width:280px">${esc(p.name)}<div style="color:var(--gray);font-size:11px">${esc(p.unit)}</div></td>
       <td>${esc(p.sku||'—')}</td>
-      <td><input class="price-inp" id="pr_${o.id}" value="${o.price??''}"></td>
+      <td><input class="price-inp" id="pr_${k}" value="${o.price??''}"></td>
       <td>
-        <select id="st_${o.id}" style="width:auto">
+        <select id="st_${k}" style="width:auto">
           <option value="true" ${o.in_stock?'selected':''}>В наличии</option>
           <option value="false" ${!o.in_stock?'selected':''}>Под заказ</option>
         </select>
       </td>
       <td style="white-space:nowrap">
-        <button class="btn btn-sm" onclick="updOffer(${o.id})">✓</button>
+        <button class="btn btn-sm" onclick="updOffer(${o.id||null}, ${p.id})">✓</button>
         <button class="btn btn-ghost btn-sm" onclick="delProduct(${p.id})">Удалить</button>
       </td>
     </tr>`;
   }).join('');
 }
 
-async function updOffer(offerId){
+async function updOffer(offerId, productId){
   clearMsg('cabMsg');
-  const price=parseFloat(String($('pr_'+offerId).value).replace(',','.'));
+  const price=parseFloat(String($('pr_'+(offerId||productId)).value).replace(',','.'));
+  const inStock = $('st_'+(offerId||productId)).value==='true';
   if(isNaN(price)||price<=0) return msg('cabMsg','Цена должна быть числом больше нуля');
+
+  // если у товара ещё нет строки цены (offer) — создаём её
+  if(!offerId || offerId==='undefined'){
+    const ins = await db.from('offers').insert({
+      product_id: productId, supplier_id: mySupplier.id,
+      price, in_stock: inStock, owner_id: me.id
+    });
+    if(ins.error) return msg('cabMsg','Ошибка: '+ins.error.message);
+    msg('cabMsg','Сохранено ✓', true);
+    await loadProducts();
+    return;
+  }
+
   const { error } = await db.from('offers').update({
-    price, in_stock: $('st_'+offerId).value==='true', price_updated_at:new Date().toISOString()
+    price, in_stock: inStock, price_updated_at:new Date().toISOString()
   }).eq('id', offerId);
   if(error) return msg('cabMsg','Ошибка: '+error.message);
   msg('cabMsg','Сохранено ✓', true);
