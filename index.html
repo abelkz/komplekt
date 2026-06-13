@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0052)file:///C:/Users/MEISO-ARCH-1/Downloads/index_5.html -->
+<html lang="ru" style="--tg-viewport-height: 100vh; --tg-viewport-stable-height: 100vh;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>КОМПЛЕКТ — цены на материалы</title>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="./КОМПЛЕКТ — цены на материалы_files/telegram-web-app.js.загрузка"></script>
 <style>
   :root{
     --ink:#1b1d1c; --paper:#f7f6f4; --card:#ffffff; --line:#e6e4e1;
@@ -130,8 +130,37 @@
 </head>
 <body>
 <div class="tape"></div>
-<div id="app"></div>
-<div class="nav" id="nav"></div>
+<div id="app"><div class="wrap">
+    <div class="row" style="align-items:baseline">
+      <div><h1>КОМПЛЕКТ</h1><div class="sub">цены поставщиков · <span style="color:#1f7a4d">● база подключена</span></div></div>
+      <span class="badge b-orange">β Астана</span>
+    </div>
+    <div class="searchbar">
+      <span style="color:#a8a6a2">⌕</span>
+      <input id="q" placeholder="Название или артикул…" onkeydown="if(event.key===&#39;Enter&#39;)doSearch()">
+      <button class="btn" onclick="doSearch()">Найти</button>
+    </div>
+    <div class="section-label">Категории</div>
+    <div class="grid4"><div class="cat" onclick="openCat(&#39;tile&#39;)"><div class="em">▦</div><div class="nm">Керамогранит</div></div><div class="cat" onclick="openCat(&#39;laminate&#39;)"><div class="em">▤</div><div class="nm">Ламинат</div></div><div class="cat" onclick="openCat(&#39;paint&#39;)"><div class="em">◐</div><div class="nm">Краска</div></div><div class="cat" onclick="openCat(&#39;wallpaper&#39;)"><div class="em">▥</div><div class="nm">Обои</div></div><div class="cat" onclick="openCat(&#39;light&#39;)"><div class="em">✦</div><div class="nm">Освещение</div></div><div class="cat" onclick="openCat(&#39;electric&#39;)"><div class="em">⚡</div><div class="nm">Электрика</div></div><div class="cat" onclick="openCat(&#39;plumbing&#39;)"><div class="em">◉</div><div class="nm">Сантехника</div></div><div class="cat" onclick="openCat(&#39;doors&#39;)"><div class="em">▯</div><div class="nm">Двери</div></div>
+    </div>
+    <div class="section-label">Недавно искали</div>
+      <div><button class="chip" onclick="searchFor(&#39;керамогранит 60х60&#39;)">⟲ керамогранит 60х60</button><button class="chip" onclick="searchFor(&#39;tikkurila&#39;)">⟲ tikkurila</button></div>
+    <div class="section-label">Цена снизилась</div>
+    <div class="card" onclick="openProduct(4)">
+      <div class="cardflex">
+        <div class="thumb-sm" style="background-image:url(&#39;data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22400%22%20height%3D%22300%22%3E%3Crect%20width%3D%22400%22%20height%3D%22300%22%20fill%3D%22%23b9874c%22%2F%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%2278%22%20height%3D%22300%22%20fill%3D%22%239b6c36%22%20opacity%3D%220.2%22%2F%3E%3Crect%20x%3D%2280%22%20y%3D%220%22%20width%3D%2278%22%20height%3D%22300%22%20fill%3D%22%239b6c36%22%20opacity%3D%220.4%22%2F%3E%3Crect%20x%3D%22160%22%20y%3D%220%22%20width%3D%2278%22%20height%3D%22300%22%20fill%3D%22%239b6c36%22%20opacity%3D%220.28%22%2F%3E%3Crect%20x%3D%22240%22%20y%3D%220%22%20width%3D%2278%22%20height%3D%22300%22%20fill%3D%22%239b6c36%22%20opacity%3D%220.5%22%2F%3E%3Crect%20x%3D%22320%22%20y%3D%220%22%20width%3D%2278%22%20height%3D%22300%22%20fill%3D%22%239b6c36%22%20opacity%3D%220.32%22%2F%3E%3C%2Fsvg%3E&#39;)"></div>
+        <div class="body"><div class="row"><div>
+          <div class="pname">Ламинат Kronospan Castello 8 мм</div>
+          <div class="psku">от 3 150 ₸/м² · −6% за неделю</div>
+        </div><span class="badge b-green">↓</span></div></div>
+      </div>
+    </div>
+  </div></div>
+<div class="nav" id="nav"><button class="on" onclick="goTab(&#39;search&#39;)">
+       <span class="i">⌕</span>Поиск</button><button class="" onclick="goTab(&#39;favs&#39;)">
+       <span class="dot">1</span><span class="i">♡</span>Избранное</button><button class="" onclick="goTab(&#39;project&#39;)">
+       <span class="dot">2</span><span class="i">▣</span>Подборки</button><button class="" onclick="goTab(&#39;profile&#39;)">
+       <span class="i">◉</span>Профиль</button></div>
 <div id="overlay"></div>
 
 <script>
@@ -599,8 +628,8 @@ function renderProject(){
     ${rows.length?`
       <div class="total"><span class="l">Итого по подборке</span><span class="v">${fmt(total)} ₸</span></div>
       <div class="grid3">
-        <div class="exp" onclick="toast('Excel-спецификация — в полной версии')"><span class="i">📊</span>Excel</div>
-        <div class="exp" onclick="toast('PDF-спецификация — в полной версии')"><span class="i">📄</span>PDF</div>
+        <div class="exp" onclick="exportExcel()"><span class="i">📊</span>Excel</div>
+        <div class="exp" onclick="exportPDF()"><span class="i">📄</span>PDF</div>
         <div class="exp" onclick="sendToClient()"><span class="i">✈</span>Клиенту</div>
       </div>`:''}
   </div>`;
@@ -631,6 +660,127 @@ function persistQty(pid){
     : sbw('DELETE', `project_items?project_id=eq.${S.project.id}&product_id=eq.${pid}`);
   req.catch(()=>toast('Не сохранилось — проверьте связь'));
 }
+/* ───────── Экспорт спецификации: Excel и PDF ─────────
+   Библиотеки подгружаются только при первом нажатии (чтобы не тормозить запуск).
+   Каждая — с запасным CDN на случай блокировки основного. */
+function loadScript(src){
+  return new Promise((res, rej) => {
+    const s = document.createElement('script');
+    s.src = src; s.onload = res; s.onerror = rej;
+    document.head.appendChild(s);
+  });
+}
+async function ensureLib(globalName, urls){
+  if (window[globalName]) return true;
+  for (const u of urls){
+    try { await loadScript(u); if (window[globalName]) return true; } catch(e){}
+  }
+  return false;
+}
+
+// строки спецификации из текущей подборки (по лучшим ценам)
+function specData(){
+  const rows = S.project.items.map((it, i) => {
+    const p = PRODUCTS.find(x => x.id === it.pid);
+    const best = [...p.offers].sort((a,b) => a.p - b.p)[0];
+    return {
+      n: i+1, name: p.name, sku: p.sku || '', supplier: best.s,
+      price: best.p, qty: it.qty, unit: p.unit, sum: Math.round(best.p * it.qty * 100) / 100
+    };
+  });
+  const total = rows.reduce((s, r) => s + r.sum, 0);
+  return { rows, total };
+}
+const specFileName = ext =>
+  ('Спецификация ' + S.project.name + ' ' + new Date().toLocaleDateString('ru-RU')).replace(/[\\/:*?"<>|·]/g,'-') + '.' + ext;
+
+async function exportExcel(){
+  if (!S.project.items.length) return toast('Подборка пуста');
+  toast('Готовлю Excel…');
+  const ok = await ensureLib('XLSX', [
+    'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
+    'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js',
+  ]);
+  if (!ok) return toast('Модуль Excel не загрузился — проверьте связь');
+  try{
+    const { rows, total } = specData();
+    const aoa = [
+      ['Спецификация: ' + S.project.name],
+      ['Дата: ' + new Date().toLocaleDateString('ru-RU') + ' · сформировано в КОМПЛЕКТ'],
+      [],
+      ['№','Наименование','Артикул','Поставщик','Цена, ₸','Кол-во','Ед.','Сумма, ₸'],
+      ...rows.map(r => [r.n, r.name, r.sku, r.supplier, r.price, r.qty, r.unit, r.sum]),
+      [],
+      ['','','','','','','Итого:', total],
+    ];
+    const ws = XLSX.utils.aoa_to_sheet(aoa);
+    ws['!cols'] = [{wch:4},{wch:52},{wch:16},{wch:20},{wch:11},{wch:8},{wch:6},{wch:13}];
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Спецификация');
+    XLSX.writeFile(wb, specFileName('xlsx'));
+    toast('Excel сформирован — проверьте загрузки');
+  }catch(e){ toast('Не получилось: ' + e.message); }
+}
+
+async function exportPDF(){
+  if (!S.project.items.length) return toast('Подборка пуста');
+  toast('Готовлю PDF…');
+  const okMain = await ensureLib('pdfMake', [
+    'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js',
+    'https://cdn.jsdelivr.net/npm/pdfmake@0.2.7/build/pdfmake.min.js',
+  ]);
+  if (okMain && !pdfMake.vfs){
+    // файл со шрифтами (включает кириллицу)
+    for (const u of [
+      'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js',
+      'https://cdn.jsdelivr.net/npm/pdfmake@0.2.7/build/vfs_fonts.js',
+    ]){ try { await loadScript(u); if (pdfMake.vfs) break; } catch(e){} }
+  }
+  if (!okMain || !pdfMake.vfs) return toast('Модуль PDF не загрузился — проверьте связь');
+  try{
+    const { rows, total } = specData();
+    const dd = {
+      pageMargins: [36, 40, 36, 40],
+      content: [
+        { columns: [
+          { text: 'КОМПЛЕКТ', bold: true, fontSize: 15, color: '#e84e0f' },
+          { text: new Date().toLocaleDateString('ru-RU'), alignment: 'right', color: '#6b6f6d', fontSize: 10 },
+        ]},
+        { text: 'Спецификация · ' + S.project.name, fontSize: 13, bold: true, margin: [0, 10, 0, 2] },
+        { text: 'Цены — лучшие предложения поставщиков на дату формирования', fontSize: 9, color: '#6b6f6d', margin: [0, 0, 0, 12] },
+        { table: {
+            headerRows: 1,
+            widths: [14, '*', 58, 76, 50, 34, 24, 56],
+            body: [
+              ['№','Наименование','Артикул','Поставщик','Цена, тг','Кол-во','Ед.','Сумма, тг']
+                .map(t => ({ text: t, bold: true, fontSize: 8.5, fillColor: '#f1efec' })),
+              ...rows.map(r => [
+                { text: String(r.n), fontSize: 8.5 },
+                { text: r.name, fontSize: 8.5 },
+                { text: r.sku, fontSize: 8.5 },
+                { text: r.supplier, fontSize: 8.5 },
+                { text: fmt(r.price), fontSize: 8.5, alignment: 'right' },
+                { text: String(r.qty), fontSize: 8.5, alignment: 'right' },
+                { text: r.unit, fontSize: 8.5 },
+                { text: fmt(r.sum), fontSize: 8.5, alignment: 'right' },
+              ]),
+            ],
+          },
+          layout: { hLineColor: () => '#e6e4e1', vLineColor: () => '#e6e4e1', hLineWidth: () => 0.5, vLineWidth: () => 0.5 },
+        },
+        { columns: [
+          { text: '' },
+          { text: 'Итого: ' + fmt(total) + ' тг', bold: true, fontSize: 12, alignment: 'right', margin: [0, 12, 0, 0] },
+        ]},
+        { text: 'Сформировано в Telegram-приложении КОМПЛЕКТ · цены могли измениться, актуальность уточняйте у поставщика',
+          fontSize: 8, color: '#9b9893', margin: [0, 24, 0, 0] },
+      ],
+    };
+    pdfMake.createPdf(dd).download(specFileName('pdf'));
+    toast('PDF сформирован — проверьте загрузки');
+  }catch(e){ toast('Не получилось: ' + e.message); }
+}
+
 function sendToClient(){
   // Демо: формируем текст спецификации и отправляем через Telegram share
   const rows = S.project.items.map(it=>{
@@ -691,5 +841,6 @@ loadData()
     toast('База недоступна — показаны демо-данные');
   });
 </script>
-</body>
-</html>
+
+
+</body></html>
