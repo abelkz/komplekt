@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<!-- saved from url=(0052)file:///C:/Users/MEISO-ARCH-1/Downloads/index_8.html -->
-<html lang="ru" data-theme="light" style="--tg-viewport-height: 100vh; --tg-viewport-stable-height: 100vh;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>КОМПЛЕКТ — цены на материалы (v3)</title>
-<script src="./index_files/telegram-web-app.js.загрузка"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com/">
-<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
-<link href="./index_files/css2" rel="stylesheet">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Unbounded:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
     /* светлая тема (по умолчанию) */
@@ -181,37 +181,8 @@
 </head>
 <body>
 <div class="tape"></div>
-<div id="app"><div class="wrap">
-    <div class="row" style="align-items:center">
-      <div><h1>КОМПЛЕКТ</h1><div class="sub">цены поставщиков · <span style="color:var(--green);font-weight:700">● база подключена</span></div></div>
-      <button class="iconbtn" onclick="toggleTheme()" aria-label="Сменить тему"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg></button>
-    </div>
-    <div class="searchbar">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m21 21-4.3-4.3"></path></svg>
-      <input id="q" placeholder="Название или артикул…" onkeydown="if(event.key===&#39;Enter&#39;)doSearch()">
-      <button class="btn btn-orange" onclick="doSearch()">Найти</button>
-    </div>
-    <div class="section-label">Категории</div>
-    <div class="grid4"><div class="cat" onclick="openCat(&#39;tile&#39;)"><div class="em"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="3" width="7.5" height="7.5" rx="1"></rect><rect x="13.5" y="3" width="7.5" height="7.5" rx="1"></rect><rect x="3" y="13.5" width="7.5" height="7.5" rx="1"></rect><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1"></rect></svg></div><div class="nm">Керамогранит</div></div><div class="cat" onclick="openCat(&#39;laminate&#39;)"><div class="em"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 7h18M3 12h18M3 17h18"></path></svg></div><div class="nm">Ламинат</div></div><div class="cat" onclick="openCat(&#39;paint&#39;)"><div class="em"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M19 3H5a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z"></path><path d="M12 12v4a2 2 0 0 1-2 2H9a2 2 0 0 0-2 2v1"></path></svg></div><div class="nm">Краска</div></div><div class="cat" onclick="openCat(&#39;wallpaper&#39;)"><div class="em"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="7" cy="7" r="1.6"></circle><circle cx="17" cy="7" r="1.6"></circle><circle cx="7" cy="17" r="1.6"></circle><circle cx="17" cy="17" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle></svg></div><div class="nm">Обои</div></div><div class="cat" onclick="openCat(&#39;light&#39;)"><div class="em"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1h6c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"></path></svg></div><div class="nm">Освещение</div></div><div class="cat" onclick="openCat(&#39;electric&#39;)"><div class="em"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"></path></svg></div><div class="nm">Электрика</div></div><div class="cat" onclick="openCat(&#39;plumbing&#39;)"><div class="em"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3v6M5 9h8v3a4 4 0 0 1-8 0z"></path><path d="M13 7h3a3 3 0 0 1 3 3v2"></path></svg></div><div class="nm">Сантехника</div></div><div class="cat" onclick="openCat(&#39;doors&#39;)"><div class="em"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><rect x="6" y="2" width="12" height="20" rx="1"></rect><circle cx="14.5" cy="12" r="1"></circle></svg></div><div class="nm">Двери</div></div>
-    </div>
-    <div class="section-label">Недавно искали</div>
-      <div><button class="chip" onclick="searchFor(&#39;керамогранит 60х60&#39;)">керамогранит 60х60</button><button class="chip" onclick="searchFor(&#39;tikkurila&#39;)">tikkurila</button></div>
-    <div class="section-label">Цена снизилась</div>
-    <div class="card" onclick="openProduct(4)">
-      <div class="cardflex">
-        <div class="thumb-sm" style="background-image:url(&#39;data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22400%22%20height%3D%22300%22%3E%3Crect%20width%3D%22400%22%20height%3D%22300%22%20fill%3D%22%23b9874c%22%2F%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%2278%22%20height%3D%22300%22%20fill%3D%22%239b6c36%22%20opacity%3D%220.2%22%2F%3E%3Crect%20x%3D%2280%22%20y%3D%220%22%20width%3D%2278%22%20height%3D%22300%22%20fill%3D%22%239b6c36%22%20opacity%3D%220.4%22%2F%3E%3Crect%20x%3D%22160%22%20y%3D%220%22%20width%3D%2278%22%20height%3D%22300%22%20fill%3D%22%239b6c36%22%20opacity%3D%220.28%22%2F%3E%3Crect%20x%3D%22240%22%20y%3D%220%22%20width%3D%2278%22%20height%3D%22300%22%20fill%3D%22%239b6c36%22%20opacity%3D%220.5%22%2F%3E%3Crect%20x%3D%22320%22%20y%3D%220%22%20width%3D%2278%22%20height%3D%22300%22%20fill%3D%22%239b6c36%22%20opacity%3D%220.32%22%2F%3E%3C%2Fsvg%3E&#39;)"></div>
-        <div class="body"><div class="row"><div>
-          <div class="pname">Ламинат Kronospan Castello 8 мм</div>
-          <div class="psku">от 3 150 ₸/м² · −6% за неделю</div>
-        </div><span class="badge b-green"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5S5 13 5 15a7 7 0 0 0 7 7z"></path></svg></span></div></div>
-      </div>
-    </div>
-  </div></div>
-<div class="nav" id="nav"><button class="on" onclick="goTab(&#39;search&#39;)">
-       <span class="i"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m21 21-4.3-4.3"></path></svg></span>Поиск</button><button class="" onclick="goTab(&#39;favs&#39;)">
-       <span class="dot">1</span><span class="i"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"></path></svg></span>Избранное</button><button class="" onclick="goTab(&#39;project&#39;)">
-       <span class="dot">3</span><span class="i"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m12 2 9 5-9 5-9-5 9-5z"></path><path d="m3 12 9 5 9-5"></path><path d="m3 17 9 5 9-5"></path></svg></span>Подборки</button><button class="" onclick="goTab(&#39;profile&#39;)">
-       <span class="i"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg></span>Профиль</button></div>
+<div id="app"></div>
+<div class="nav" id="nav"></div>
 <div id="overlay"></div>
 
 <script>
@@ -966,6 +937,5 @@ loadData()
     toast('База недоступна — показаны демо-данные');
   });
 </script>
-
-
-</body></html>
+</body>
+</html>
