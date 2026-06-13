@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<!-- saved from url=(0052)file:///C:/Users/MEISO-ARCH-1/Downloads/index_6.html -->
+<!-- saved from url=(0052)file:///C:/Users/MEISO-ARCH-1/Downloads/index_7.html -->
 <html lang="ru" style="--tg-viewport-height: 100vh; --tg-viewport-stable-height: 100vh;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>КОМПЛЕКТ — цены на материалы (v2)</title>
+<title>КОМПЛЕКТ — цены на материалы (v3)</title>
 <script src="./index_files/telegram-web-app.js.загрузка"></script>
 <style>
   :root{
@@ -480,9 +480,12 @@ function openProduct(id){
 // ── статистика для поставщиков: запись просмотров и кликов ──
 function trackEvent(productId, supplierId, type){
   if (!supplierId) return; // у демо-данных без базы supplier_id нет
-  sbw('POST', 'events', { product_id: productId, supplier_id: supplierId, type, user_tg_id: TG_ID })
-    .then(()=>{ if (type==='view') toast('✓ просмотр записан (v2)'); })
-    .catch(e=>{ toast('✗ событие не записано: ' + String(e.message||e).slice(0,60)); });
+  // запись через функцию log_event (обходит RLS безопасно)
+  sbw('POST', 'rpc/log_event', {
+    p_product: productId, p_supplier: supplierId, p_type: type, p_user: TG_ID
+  })
+    .then(()=>{ if (type==='view') toast('✓ просмотр записан (v3)'); })
+    .catch(e=>{ toast('✗ не записано: ' + String(e.message||e).slice(0,70)); });
 }
 function trackView(productId){
   const p = PRODUCTS.find(x=>x.id===productId);
