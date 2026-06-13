@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0052)file:///C:/Users/MEISO-ARCH-1/Downloads/index_6.html -->
+<html lang="ru" style="--tg-viewport-height: 100vh; --tg-viewport-stable-height: 100vh;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>КОМПЛЕКТ — цены на материалы</title>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<title>КОМПЛЕКТ — цены на материалы (v2)</title>
+<script src="./index_files/telegram-web-app.js.загрузка"></script>
 <style>
   :root{
     --ink:#1b1d1c; --paper:#f7f6f4; --card:#ffffff; --line:#e6e4e1;
@@ -130,8 +130,37 @@
 </head>
 <body>
 <div class="tape"></div>
-<div id="app"></div>
-<div class="nav" id="nav"></div>
+<div id="app"><div class="wrap">
+    <div class="row" style="align-items:baseline">
+      <div><h1>КОМПЛЕКТ</h1><div class="sub">цены поставщиков · <span style="color:#1f7a4d">● база подключена</span></div></div>
+      <span class="badge b-orange">β Астана</span>
+    </div>
+    <div class="searchbar">
+      <span style="color:#a8a6a2">⌕</span>
+      <input id="q" placeholder="Название или артикул…" onkeydown="if(event.key===&#39;Enter&#39;)doSearch()">
+      <button class="btn" onclick="doSearch()">Найти</button>
+    </div>
+    <div class="section-label">Категории</div>
+    <div class="grid4"><div class="cat" onclick="openCat(&#39;tile&#39;)"><div class="em">▦</div><div class="nm">Керамогранит</div></div><div class="cat" onclick="openCat(&#39;laminate&#39;)"><div class="em">▤</div><div class="nm">Ламинат</div></div><div class="cat" onclick="openCat(&#39;paint&#39;)"><div class="em">◐</div><div class="nm">Краска</div></div><div class="cat" onclick="openCat(&#39;wallpaper&#39;)"><div class="em">▥</div><div class="nm">Обои</div></div><div class="cat" onclick="openCat(&#39;light&#39;)"><div class="em">✦</div><div class="nm">Освещение</div></div><div class="cat" onclick="openCat(&#39;electric&#39;)"><div class="em">⚡</div><div class="nm">Электрика</div></div><div class="cat" onclick="openCat(&#39;plumbing&#39;)"><div class="em">◉</div><div class="nm">Сантехника</div></div><div class="cat" onclick="openCat(&#39;doors&#39;)"><div class="em">▯</div><div class="nm">Двери</div></div>
+    </div>
+    <div class="section-label">Недавно искали</div>
+      <div><button class="chip" onclick="searchFor(&#39;керамогранит 60х60&#39;)">⟲ керамогранит 60х60</button><button class="chip" onclick="searchFor(&#39;tikkurila&#39;)">⟲ tikkurila</button></div>
+    <div class="section-label">Цена снизилась</div>
+    <div class="card" onclick="openProduct(4)">
+      <div class="cardflex">
+        <div class="thumb-sm" style="background-image:url(&#39;data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22400%22%20height%3D%22300%22%3E%3Crect%20width%3D%22400%22%20height%3D%22300%22%20fill%3D%22%23b9874c%22%2F%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%2278%22%20height%3D%22300%22%20fill%3D%22%239b6c36%22%20opacity%3D%220.2%22%2F%3E%3Crect%20x%3D%2280%22%20y%3D%220%22%20width%3D%2278%22%20height%3D%22300%22%20fill%3D%22%239b6c36%22%20opacity%3D%220.4%22%2F%3E%3Crect%20x%3D%22160%22%20y%3D%220%22%20width%3D%2278%22%20height%3D%22300%22%20fill%3D%22%239b6c36%22%20opacity%3D%220.28%22%2F%3E%3Crect%20x%3D%22240%22%20y%3D%220%22%20width%3D%2278%22%20height%3D%22300%22%20fill%3D%22%239b6c36%22%20opacity%3D%220.5%22%2F%3E%3Crect%20x%3D%22320%22%20y%3D%220%22%20width%3D%2278%22%20height%3D%22300%22%20fill%3D%22%239b6c36%22%20opacity%3D%220.32%22%2F%3E%3C%2Fsvg%3E&#39;)"></div>
+        <div class="body"><div class="row"><div>
+          <div class="pname">Ламинат Kronospan Castello 8 мм</div>
+          <div class="psku">от 3 150 ₸/м² · −6% за неделю</div>
+        </div><span class="badge b-green">↓</span></div></div>
+      </div>
+    </div>
+  </div></div>
+<div class="nav" id="nav"><button class="on" onclick="goTab(&#39;search&#39;)">
+       <span class="i">⌕</span>Поиск</button><button class="" onclick="goTab(&#39;favs&#39;)">
+       <span class="dot">1</span><span class="i">♡</span>Избранное</button><button class="" onclick="goTab(&#39;project&#39;)">
+       <span class="dot">3</span><span class="i">▣</span>Подборки</button><button class="" onclick="goTab(&#39;profile&#39;)">
+       <span class="i">◉</span>Профиль</button></div>
 <div id="overlay"></div>
 
 <script>
@@ -452,7 +481,8 @@ function openProduct(id){
 function trackEvent(productId, supplierId, type){
   if (!supplierId) return; // у демо-данных без базы supplier_id нет
   sbw('POST', 'events', { product_id: productId, supplier_id: supplierId, type, user_tg_id: TG_ID })
-    .catch(()=>{}); // аналитика не должна мешать пользователю — ошибки молча игнорируем
+    .then(()=>{ if (type==='view') toast('✓ просмотр записан (v2)'); })
+    .catch(e=>{ toast('✗ событие не записано: ' + String(e.message||e).slice(0,60)); });
 }
 function trackView(productId){
   const p = PRODUCTS.find(x=>x.id===productId);
@@ -830,5 +860,6 @@ loadData()
     toast('База недоступна — показаны демо-данные');
   });
 </script>
-</body>
-</html>
+
+
+</body></html>
